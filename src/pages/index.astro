@@ -172,7 +172,7 @@ const about = {
   name: "Tom Noske",
   role: "Founder, Time to Build",
   bio: "I've built an education business on landing pages, and watched creators waste weeks (and thousands) on theirs. So I packaged the exact system my team uses into a kit you can run yourself, with AI doing the heavy lifting.",
-  image: "https://i.pravatar.cc/640?img=12",
+  image: "/images/about-tom.jpg",
 };
 
 // --- FAQ ---
@@ -473,7 +473,7 @@ const HEADING = "text-3xl font-bold tracking-tight text-ink md:text-4xl";
     <div class={SECTION}>
       <div class="grid items-center gap-10 md:grid-cols-[2fr_3fr] md:gap-14">
         <div class="overflow-hidden rounded-card border border-line bg-surface-2">
-          <img src={about.image} alt={about.name} width="640" height="640" class="h-auto w-full" loading="lazy" />
+          <img src={about.image} alt={about.name} width="900" height="1352" class="aspect-[4/5] w-full object-cover" loading="lazy" />
         </div>
         <div>
           <p class="text-sm font-bold uppercase tracking-wide text-brand-600">About</p>
