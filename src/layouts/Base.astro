@@ -54,30 +54,35 @@ const fullTitle = title === site.name ? title : `${title} | ${site.name}`;
     <slot />
 
     <script>
-      // Recolour the favicon to match the current brand accent + theme, and
-      // keep it in sync as the Customise Theme panel changes colour/theme.
-      const brandColor = () => {
+      // Recolour the favicon to match the brand accent + theme, live with the
+      // Customise Theme panel. The accent can be an oklch() value, which the
+      // favicon renderer often can't paint - so we normalise it to hex via a
+      // canvas first, then hard-replace the <link> so the browser re-reads it.
+      const faviconColor = () => {
         const probe = document.createElement("span");
         probe.style.cssText = "display:none;color:var(--color-brand-500)";
         document.body.appendChild(probe);
-        const c = getComputedStyle(probe).color;
+        const resolved = getComputedStyle(probe).color;
         probe.remove();
-        return c || "#14a89e";
+        const ctx = document.createElement("canvas").getContext("2d");
+        if (!ctx) return "#14a89e";
+        ctx.fillStyle = "#14a89e";
+        try { ctx.fillStyle = resolved; } catch (e) {}
+        return ctx.fillStyle;
       };
       const setFavicon = () => {
         const svg =
           '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">' +
-          '<rect width="32" height="32" rx="7" fill="' + brandColor() + '"/>' +
+          '<rect width="32" height="32" rx="7" fill="' + faviconColor() + '"/>' +
           '<path d="M16 22V11M11.5 15.5 16 11 20.5 15.5" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>' +
           "</svg>";
-        let link = document.querySelector('link[rel="icon"]');
-        if (!link) {
-          link = document.createElement("link");
-          link.setAttribute("rel", "icon");
-          document.head.appendChild(link);
-        }
+        const href = "data:image/svg+xml," + encodeURIComponent(svg);
+        document.querySelectorAll('link[rel~="icon"]').forEach((n) => n.remove());
+        const link = document.createElement("link");
+        link.setAttribute("rel", "icon");
         link.setAttribute("type", "image/svg+xml");
-        link.setAttribute("href", "data:image/svg+xml," + encodeURIComponent(svg));
+        link.setAttribute("href", href);
+        document.head.appendChild(link);
       };
       setFavicon();
       new MutationObserver(setFavicon).observe(document.documentElement, {
