@@ -98,7 +98,7 @@ export default function PricingToggle({
         <div className="inline-flex items-baseline justify-center">
           <NumberFlow
             value={current.amount}
-            format={{ style: "currency", currency: "USD", maximumFractionDigits: 0 }}
+            format={{ style: "currency", currency: "USD", currencyDisplay: "narrowSymbol", maximumFractionDigits: 0 }}
             className="text-5xl font-extrabold leading-none text-brand-400"
             transformTiming={{ duration: 600, easing: "cubic-bezier(0.22, 1, 0.36, 1)" }}
           />
