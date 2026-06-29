@@ -52,6 +52,22 @@ const faqs = [
     a: "Even better. Most people who've stalled are one or two specific fixes away. This is built to surface exactly those.",
   },
 ];
+
+// --- BODY HEADINGS + chrome (the long-form prose below is yours to rewrite directly) ---
+const freeBadge = "100% Free";
+const insideHeading = "Here's what's inside";
+const feature1Heading = "A simple framework for your offer";
+const feature2Heading = "Plug-and-play templates";
+const feature3Heading = "Where to find your first buyers";
+const feature4Heading = "Pricing without the guesswork";
+const feature5Heading = "A step-by-step launch checklist";
+const figureCaption =
+  "Everything in one place: the framework, the templates, and the fill-in-the-blanks worksheets.";
+const whereHeading = "Where this fits";
+const proofHeading = "But does it actually work?";
+const whyFreeHeading = "Why is it free?";
+const faqHeading = "Frequently asked questions";
+const orgName = "Time to Build";
 ---
 
 <Base title={headline} description={subheadline}>
@@ -62,7 +78,7 @@ const faqs = [
     <div class="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
       <Logo />
       <span class="text-xs font-bold uppercase tracking-wide text-brand-600">
-        100% Free
+        {freeBadge}
       </span>
     </div>
   </header>
@@ -97,7 +113,7 @@ const faqs = [
 
         <p>Jump to <a href="#proof">the results</a> or <a href="#faq">the FAQ</a>.</p>
 
-        <h2>Here's what's inside</h2>
+        <h2>{insideHeading}</h2>
 
         <p>
           There's a wide gap between <strong>being good at something</strong> and <strong>having an offer</strong>. One earns you
@@ -122,46 +138,43 @@ const faqs = [
               loading="lazy"
             />
           </div>
-          <figcaption>
-            Everything in one place: the framework, the templates, and the
-            fill-in-the-blanks worksheets.
-          </figcaption>
+          <figcaption>{figureCaption}</figcaption>
         </figure>
 
-        <h3>A simple framework for your offer</h3>
+        <h3>{feature1Heading}</h3>
         <p>
           A repeatable way to turn a skill into a clear, specific promise people
           understand in one read. No positioning theory, just the questions that
           shape a real offer.
         </p>
 
-        <h3>Plug-and-play templates</h3>
+        <h3>{feature2Heading}</h3>
         <p>
           The page, the emails, and the sales message, already written. You swap
           in your words and your story, then publish. Nothing to design from a
           blank page.
         </p>
 
-        <h3>Where to find your first buyers</h3>
+        <h3>{feature3Heading}</h3>
         <p>
           The unglamorous truth about getting your first ten customers, and the
           short list of places they're already waiting. No paid ads needed to
           start.
         </p>
 
-        <h3>Pricing without the guesswork</h3>
+        <h3>{feature4Heading}</h3>
         <p>
           A clear way to land on a number that feels fair to you and obvious to
           them, so you stop pricing from fear and start pricing from value.
         </p>
 
-        <h3>A step-by-step launch checklist</h3>
+        <h3>{feature5Heading}</h3>
         <p>
           Takes you from "I have an idea" to "it's live and I've made my first
           sale." Tick the boxes in order. No theory, no fluff.
         </p>
 
-        <h2>Where this fits</h2>
+        <h2>{whereHeading}</h2>
 
         <ul>
           <li>
@@ -182,7 +195,7 @@ const faqs = [
           </li>
         </ul>
 
-        <h2 id="proof">But does it actually work?</h2>
+        <h2 id="proof">{proofHeading}</h2>
 
         <blockquote>
           I'd been "about to launch" for two years. I read this on a Saturday,
@@ -210,7 +223,7 @@ const faqs = [
           <cite>Elena Rossi, Illustrator</cite>
         </blockquote>
 
-        <h2>Why is it free?</h2>
+        <h2>{whyFreeHeading}</h2>
 
         <p>
           Because it's the front door. When you use this and it works, some of you
@@ -224,7 +237,7 @@ const faqs = [
           ready for the next step.
         </p>
 
-        <h2 id="faq">Frequently asked questions</h2>
+        <h2 id="faq">{faqHeading}</h2>
 
         <div class="sl-faq" data-faq>
           {
@@ -314,7 +327,7 @@ const faqs = [
     <div
       class="mx-auto flex max-w-6xl flex-col items-center justify-between gap-2 px-6 py-5 text-xs text-ink-muted sm:flex-row"
     >
-      <p>&copy; {new Date().getFullYear()} Time to Build. All rights reserved.</p>
+      <p>&copy; {new Date().getFullYear()} {orgName}. All rights reserved.</p>
       <div class="flex items-center gap-5">
         <TextLink href="/privacy">Privacy</TextLink>
         <TextLink href="/terms">Terms</TextLink>

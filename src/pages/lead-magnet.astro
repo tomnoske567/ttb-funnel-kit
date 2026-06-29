@@ -12,6 +12,7 @@ const headline = "Turn your skills into an offer that sells";
 const subheadline =
   "Get the one-page worksheet that helps you package what you already know into a paid offer in an afternoon.";
 const submitLabel = "Send me the worksheet";
+const noSpamLine = "No spam. Unsubscribe anytime.";
 
 // Social-proof line under the form. Replace with your real proof.
 const trustLine = "Trusted by 1,000+ creators";
@@ -60,7 +61,7 @@ const assetAlt = "Preview of the free worksheet";
             <EmailForm client:load submitLabel={submitLabel} />
           </div>
 
-          <p class="mt-3 text-sm text-ink-muted">No spam. Unsubscribe anytime.</p>
+          <p class="mt-3 text-sm text-ink-muted">{noSpamLine}</p>
 
           <!-- Trust line -->
           <div class="mt-4 flex items-center gap-2">

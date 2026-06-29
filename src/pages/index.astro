@@ -14,7 +14,8 @@ import ThemeCustomizer from "../components/ThemeCustomizer.astro";
 
 // ============================================================
 // OFFER LANDING PAGE - demo content sells the Funnel Kit itself.
-// Swap copy for your own offer. Structure + behaviour stay as-is.
+// Swap copy for your own offer. ALL visible copy lives in these consts;
+// structure + behaviour below stay as-is.
 // ============================================================
 
 const closesAt = "2026-12-31T23:59:59";
@@ -184,25 +185,84 @@ const faqs = [
   { q: "Can I cancel?", a: "Anytime, in two clicks. No contract, and you keep whatever you've built." },
 ];
 
+// --- SECTION HEADINGS, EYEBROWS & CTAs (all editable copy lives here too) ---
+const pageTitle = "Time to Build Funnel Kit";
+const ctaLabel = "Get the kit"; // shared by nav, hero, final CTA + sticky bar
+const countdownLabel = "Founding price ends in";
+
+const heroEyebrow = "Time to Build Funnel Kit";
+const heroSecondaryLabel = "See how it works";
+const heroTrustLabel = "Used by 1,000+ creators";
+
+const problemEyebrow = "The problem";
+const problemHeading = "AI can build a landing page. It just looks like everyone else's.";
+
+const solutionEyebrow = "How it works";
+const solutionHeading = "Your AI builder, plus a design system that can't go ugly";
+const solutionSub =
+  "Claude does the building. The kit makes sure it comes out clean, branded, and built to convert.";
+
+const winsEyebrow = "Student wins";
+const winsHeading = "Results from people who shipped";
+const winsSub = "Real creators, real pages, real numbers - built with the same kit you're getting.";
+
+const includedEyebrow = "Everything included";
+const includedHeading = "Here's exactly what you get";
+
+const bonusesEyebrow = "+ Included free";
+const bonusesHeading = "Stacked bonuses";
+const superBonusBadge = "Super bonus";
+const bonusesTotalLabel = "Bonuses total value";
+
+const outcomesEyebrow = "What changes";
+const outcomesHeading = "From AI slop to pages that sell";
+
+const whoEyebrow = "Who it's for";
+const whoHeading = "Read this before you buy";
+const forYouTitle = "This is for you if";
+const notForYouTitle = "This isn't for you if";
+
+const testimonialsEyebrow = "Real results";
+const testimonialsHeading = "What creators are saying";
+
+const checkoutEyebrow = "Your checkout";
+const checkoutTitle = "Get the kit";
+const checkoutTotalValue = "$4,850";
+const checkoutBadges = ["Cancel anytime", "Free hosting included", "Lifetime updates"];
+
+const aboutEyebrow = "About";
+const aboutHeading = `Hi, I'm ${about.name}`;
+
+const faqEyebrow = "Questions";
+const faqHeading = "Frequently asked questions";
+
+const finalCtaHeading = "Build a page that actually converts, today";
+const finalCtaSub =
+  "Grab the kit, brand it in one command, and have a landing page live this afternoon.";
+const finalCtaTrust = "Cancel anytime · free hosting included";
+
+const footerTagline = "Simple, AI-powered landing pages that convert.";
+const stickyNote = "Time to Build Funnel Kit";
+
 const SECTION = "mx-auto max-w-6xl px-6 py-16 md:py-20";
 const HEADING = "text-3xl font-bold tracking-tight text-ink md:text-4xl";
 ---
 
-<Base title="Time to Build Funnel Kit" description={heroSubheadline}>
-  <CountdownBar client:load targetDate={closesAt} label="Founding price ends in" />
+<Base title={pageTitle} description={heroSubheadline}>
+  <CountdownBar client:load targetDate={closesAt} label={countdownLabel} />
 
-  <SiteNav links={navLinks} ctaLabel="Get the kit" />
+  <SiteNav links={navLinks} ctaLabel={ctaLabel} />
 
   <Hero
     mode="text"
-    eyebrow="Time to Build Funnel Kit"
+    eyebrow={heroEyebrow}
     headline={heroHeadline}
     subheadline={heroSubheadline}
     bullets={heroBullets}
-    ctaLabel="Get the kit"
-    secondaryLabel="See how it works"
+    ctaLabel={ctaLabel}
+    secondaryLabel={heroSecondaryLabel}
     secondaryHref="#how"
-    trustLabel="Used by 1,000+ creators"
+    trustLabel={heroTrustLabel}
   />
 
   <ProofStrip stats={proofStats} />
@@ -213,8 +273,8 @@ const HEADING = "text-3xl font-bold tracking-tight text-ink md:text-4xl";
   <section class="bg-surface-2">
     <div class={SECTION}>
       <div class="mx-auto max-w-2xl text-center">
-        <p class="text-sm font-bold uppercase tracking-wide text-brand-600">The problem</p>
-        <h2 class={`mt-3 ${HEADING}`}>AI can build a landing page. It just looks like everyone else's.</h2>
+        <p class="text-sm font-bold uppercase tracking-wide text-brand-600">{problemEyebrow}</p>
+        <h2 class={`mt-3 ${HEADING}`}>{problemHeading}</h2>
       </div>
       <ul class="mx-auto mt-10 grid max-w-3xl gap-4 sm:grid-cols-2">
         {
@@ -233,10 +293,10 @@ const HEADING = "text-3xl font-bold tracking-tight text-ink md:text-4xl";
   <section id="how" class="bg-surface">
     <div class={SECTION}>
       <div class="mx-auto max-w-2xl text-center">
-        <p class="text-sm font-bold uppercase tracking-wide text-brand-600">How it works</p>
-        <h2 class={`mt-3 ${HEADING}`}>Your AI builder, plus a design system that can't go ugly</h2>
+        <p class="text-sm font-bold uppercase tracking-wide text-brand-600">{solutionEyebrow}</p>
+        <h2 class={`mt-3 ${HEADING}`}>{solutionHeading}</h2>
         <p class="mt-4 text-lg leading-relaxed text-ink-muted">
-          Claude does the building. The kit makes sure it comes out clean, branded, and built to convert.
+          {solutionSub}
         </p>
       </div>
       <div class="mt-12 grid gap-6 md:grid-cols-3">
@@ -257,9 +317,9 @@ const HEADING = "text-3xl font-bold tracking-tight text-ink md:text-4xl";
 
   <!-- STUDENT WINS (rotating, result-led) -->
   <StudentWins
-    eyebrow="Student wins"
-    heading="Results from people who shipped"
-    subheading="Real creators, real pages, real numbers - built with the same kit you're getting."
+    eyebrow={winsEyebrow}
+    heading={winsHeading}
+    subheading={winsSub}
     wins={studentWins}
   />
 
@@ -267,8 +327,8 @@ const HEADING = "text-3xl font-bold tracking-tight text-ink md:text-4xl";
   <section id="included" class="bg-surface-2">
     <div class={SECTION}>
       <div class="mx-auto max-w-2xl text-center">
-        <p class="text-sm font-bold uppercase tracking-wide text-brand-600">Everything included</p>
-        <h2 class={`mt-3 ${HEADING}`}>Here's exactly what you get</h2>
+        <p class="text-sm font-bold uppercase tracking-wide text-brand-600">{includedEyebrow}</p>
+        <h2 class={`mt-3 ${HEADING}`}>{includedHeading}</h2>
       </div>
       <div class="mx-auto mt-12 max-w-4xl border-t border-line">
         {
@@ -292,8 +352,8 @@ const HEADING = "text-3xl font-bold tracking-tight text-ink md:text-4xl";
   <section class="bg-surface">
     <div class={SECTION}>
       <div class="mx-auto max-w-2xl text-center">
-        <p class="text-sm font-bold uppercase tracking-wide text-brand-600">+ Included free</p>
-        <h2 class={`mt-3 ${HEADING}`}>Stacked bonuses</h2>
+        <p class="text-sm font-bold uppercase tracking-wide text-brand-600">{bonusesEyebrow}</p>
+        <h2 class={`mt-3 ${HEADING}`}>{bonusesHeading}</h2>
       </div>
 
       <div class="mt-12 grid gap-6 md:grid-cols-2">
@@ -318,7 +378,7 @@ const HEADING = "text-3xl font-bold tracking-tight text-ink md:text-4xl";
 
       <div class="mt-6 rounded-card border-2 border-brand-500 bg-card p-6 text-center md:p-8">
         <span class="inline-flex items-center rounded-md bg-brand-500 px-2.5 py-1 text-xs font-bold uppercase tracking-wide text-brand-ink">
-          Super bonus
+          {superBonusBadge}
         </span>
         <h3 class="mt-4 text-xl font-bold text-ink">{superBonus.title}</h3>
         <p class="mx-auto mt-2 max-w-xl text-sm leading-relaxed text-ink-muted">{superBonus.desc}</p>
@@ -330,7 +390,7 @@ const HEADING = "text-3xl font-bold tracking-tight text-ink md:text-4xl";
       </div>
 
       <div class="mt-6 rounded-card bg-surface-dark p-8 text-center text-ink-dark">
-        <p class="text-xs font-semibold uppercase tracking-wide text-ink-dark/60">Bonuses total value</p>
+        <p class="text-xs font-semibold uppercase tracking-wide text-ink-dark/60">{bonusesTotalLabel}</p>
         <p class="mt-2 text-4xl font-extrabold text-brand-400">{bonusesTotal}</p>
       </div>
     </div>
@@ -340,8 +400,8 @@ const HEADING = "text-3xl font-bold tracking-tight text-ink md:text-4xl";
   <section class="bg-surface-2">
     <div class={SECTION}>
       <div class="mx-auto max-w-2xl text-center">
-        <p class="text-sm font-bold uppercase tracking-wide text-brand-600">What changes</p>
-        <h2 class={`mt-3 ${HEADING}`}>From AI slop to pages that sell</h2>
+        <p class="text-sm font-bold uppercase tracking-wide text-brand-600">{outcomesEyebrow}</p>
+        <h2 class={`mt-3 ${HEADING}`}>{outcomesHeading}</h2>
       </div>
       <div class="mx-auto mt-10 max-w-2xl divide-y divide-line overflow-hidden rounded-card border border-line bg-card">
         {
@@ -361,12 +421,12 @@ const HEADING = "text-3xl font-bold tracking-tight text-ink md:text-4xl";
   <section class="bg-surface">
     <div class={SECTION}>
       <div class="mx-auto max-w-2xl text-center">
-        <p class="text-sm font-bold uppercase tracking-wide text-brand-600">Who it's for</p>
-        <h2 class={`mt-3 ${HEADING}`}>Read this before you buy</h2>
+        <p class="text-sm font-bold uppercase tracking-wide text-brand-600">{whoEyebrow}</p>
+        <h2 class={`mt-3 ${HEADING}`}>{whoHeading}</h2>
       </div>
       <div class="mx-auto mt-12 grid max-w-4xl gap-6 md:grid-cols-2">
         <div class="rounded-card bg-surface-dark p-7 text-ink-dark md:p-8">
-          <h3 class="text-xl font-bold">This is for you if</h3>
+          <h3 class="text-xl font-bold">{forYouTitle}</h3>
           <ul class="mt-5 space-y-4">
             {
               forYou.map((item) => (
@@ -383,7 +443,7 @@ const HEADING = "text-3xl font-bold tracking-tight text-ink md:text-4xl";
           </ul>
         </div>
         <div class="rounded-card border border-line bg-card p-7 md:p-8">
-          <h3 class="text-xl font-bold text-ink">This isn't for you if</h3>
+          <h3 class="text-xl font-bold text-ink">{notForYouTitle}</h3>
           <ul class="mt-5 space-y-4">
             {
               notForYou.map((item) => (
@@ -408,8 +468,8 @@ const HEADING = "text-3xl font-bold tracking-tight text-ink md:text-4xl";
   <section class="bg-surface-2">
     <div class={SECTION}>
       <div class="mx-auto max-w-2xl text-center">
-        <p class="text-sm font-bold uppercase tracking-wide text-brand-600">Real results</p>
-        <h2 class={`mt-3 ${HEADING}`}>What creators are saying</h2>
+        <p class="text-sm font-bold uppercase tracking-wide text-brand-600">{testimonialsEyebrow}</p>
+        <h2 class={`mt-3 ${HEADING}`}>{testimonialsHeading}</h2>
       </div>
       <div class="mt-12 grid gap-6 md:grid-cols-3">
         {
@@ -443,13 +503,13 @@ const HEADING = "text-3xl font-bold tracking-tight text-ink md:text-4xl";
 
   <!-- CHECKOUT (membership) -->
   <CheckoutCard
-    eyebrow="Your checkout"
-    title="Get the kit"
+    eyebrow={checkoutEyebrow}
+    title={checkoutTitle}
     deliverables={checkoutDeliverables}
     bonuses={checkoutBonuses}
-    totalValue="$4,850"
+    totalValue={checkoutTotalValue}
     membership={membership}
-    badges={["Cancel anytime", "Free hosting included", "Lifetime updates"]}
+    badges={checkoutBadges}
   />
 
   <!-- GUARANTEE -->
@@ -476,8 +536,8 @@ const HEADING = "text-3xl font-bold tracking-tight text-ink md:text-4xl";
           <img src={about.image} alt={about.name} width="900" height="1352" class="aspect-[4/5] w-full object-cover" loading="lazy" />
         </div>
         <div>
-          <p class="text-sm font-bold uppercase tracking-wide text-brand-600">About</p>
-          <h2 class={`mt-3 ${HEADING}`}>Hi, I'm {about.name}</h2>
+          <p class="text-sm font-bold uppercase tracking-wide text-brand-600">{aboutEyebrow}</p>
+          <h2 class={`mt-3 ${HEADING}`}>{aboutHeading}</h2>
           <p class="mt-2 text-base font-medium text-ink-muted">{about.role}</p>
           <p class="mt-5 text-lg leading-relaxed text-ink-muted">{about.bio}</p>
         </div>
@@ -489,8 +549,8 @@ const HEADING = "text-3xl font-bold tracking-tight text-ink md:text-4xl";
   <section id="faq" class="bg-surface-2">
     <div class="mx-auto max-w-3xl px-6 py-16 md:py-20">
       <div class="mx-auto max-w-2xl text-center">
-        <p class="text-sm font-bold uppercase tracking-wide text-brand-600">Questions</p>
-        <h2 class={`mt-3 ${HEADING}`}>Frequently asked questions</h2>
+        <p class="text-sm font-bold uppercase tracking-wide text-brand-600">{faqEyebrow}</p>
+        <h2 class={`mt-3 ${HEADING}`}>{faqHeading}</h2>
       </div>
       <div class="mt-10">
         <Faq items={faqs} />
@@ -502,23 +562,23 @@ const HEADING = "text-3xl font-bold tracking-tight text-ink md:text-4xl";
   <section class="bg-surface-dark text-ink-dark">
     <div class="mx-auto max-w-3xl px-6 py-20 text-center md:py-24">
       <h2 class="text-3xl font-extrabold tracking-tight md:text-4xl">
-        Build a page that actually converts, today
+        {finalCtaHeading}
       </h2>
       <p class="mx-auto mt-4 max-w-xl text-lg leading-relaxed text-ink-dark/70">
-        Grab the kit, brand it in one command, and have a landing page live this afternoon.
+        {finalCtaSub}
       </p>
       <div class="mt-8 flex justify-center">
-        <CtaButton label="Get the kit" />
+        <CtaButton label={ctaLabel} />
       </div>
       <p class="mt-4 text-xs uppercase tracking-wide text-ink-dark/50">
-        Cancel anytime &middot; free hosting included
+        {finalCtaTrust}
       </p>
     </div>
   </section>
 
-  <SiteFooter tagline="Simple, AI-powered landing pages that convert." />
+  <SiteFooter tagline={footerTagline} />
 
-  <StickyCta label="Get the kit" note="Time to Build Funnel Kit" />
+  <StickyCta label={ctaLabel} note={stickyNote} />
 
   <ThemeCustomizer />
 </Base>

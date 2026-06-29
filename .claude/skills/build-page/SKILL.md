@@ -33,9 +33,19 @@ route**. For a new route, copy the chosen template to `src/pages/<slug>.astro`
 ## Step 3 - Fill in the copy
 
 Every template keeps its content in clearly-labelled `const` blocks at the TOP
-of the file (e.g. `heroHeadline`, `heroBullets`, `problems`, `steps`,
-`deliverables`, `bonuses`, `faqs`, `about`, the checkout/membership object).
-**Edit those values only** - leave the markup and components below them alone.
+of the file. **This includes ALL section eyebrows, h2 headings, sublines, CTA
+labels, and component prop text** (e.g. `problemEyebrow`, `solutionHeading`,
+`solutionSub`, `outcomesHeading`, `finalCtaHeading`, `finalCtaSub`, `ctaLabel`,
+the `wins*`/`checkout*` consts) alongside the data arrays (`steps`,
+`deliverables`, `bonuses`, `faqs`, `about`, the membership object). **Rewrite
+every one of those const values** so no demo copy survives - leave the markup
+and components below them alone.
+
+**Exception - the sales letter** (`sales-letter.astro`): its long-form editorial
+BODY is written as prose directly in the `.sales-letter` `<article>` (the `<p>`,
+`<h3>`, lists, and `<blockquote>` testimonials). Rewrite that prose in place with
+the student's story - the const block only covers the headline, sub, sticky-card
+copy, FAQ, and the section headings.
 
 - Write in the student's voice, specific to their offer. No lorem ipsum, no
   "Elevate/Seamless/Unleash" filler.
