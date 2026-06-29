@@ -1,117 +1,524 @@
 ---
 import Base from "../layouts/Base.astro";
-import EmailForm from "../components/EmailForm.tsx";
-import Logo from "../components/Logo.astro";
+import CtaButton from "../components/CtaButton.astro";
+import CountdownBar from "../components/CountdownBar.tsx";
+import SiteNav from "../components/SiteNav.astro";
+import Hero from "../components/Hero.astro";
+import ProofStrip from "../components/ProofStrip.astro";
+import StudentWins from "../components/StudentWins.astro";
+import CheckoutCard from "../components/CheckoutCard.astro";
+import Faq from "../components/Faq.astro";
+import StickyCta from "../components/StickyCta.astro";
+import SiteFooter from "../components/SiteFooter.astro";
+import ThemeCustomizer from "../components/ThemeCustomizer.astro";
 
 // ============================================================
-// LEAD MAGNET TEMPLATE - fill in the blanks
-// Swap the copy below for your offer. Structure stays as-is.
+// OFFER LANDING PAGE - demo content sells the Funnel Kit itself.
+// Swap copy for your own offer. Structure + behaviour stay as-is.
 // ============================================================
-const eyebrow = "Free Worksheet";
-const headline = "Turn your skills into an offer that sells";
-const subheadline =
-  "Get the one-page worksheet that helps you package what you already know into a paid offer in an afternoon.";
-const submitLabel = "Send me the worksheet";
 
-// Social-proof line under the form. Replace with your real proof.
-const trustLine = "Trusted by 1,000+ creators";
+const closesAt = "2026-12-31T23:59:59";
 
-// Objection-handle stack under the image. Answer the reader's "yeah, but..." doubts.
-const objections = [
-  "Built from offers that have actually sold",
-  "Takes an afternoon, not another course",
-  "Works whether you coach, create, or consult",
+const navLinks = [
+  { label: "How it works", href: "#how" },
+  { label: "What's included", href: "#included" },
+  { label: "Pricing", href: "#checkout" },
+  { label: "FAQ", href: "#faq" },
 ];
 
-// Replace with your lead magnet cover / mockup (recommended ~1000x1200).
-const assetImage = "https://picsum.photos/seed/ttb-worksheet/1000/1200";
-const assetAlt = "Preview of the free worksheet";
+// --- HERO ---
+const heroHeadline =
+  'Simple, AI-powered landing pages that <span class="text-brand-500">actually convert</span>';
+const heroSubheadline =
+  "Build a branded, high-converting landing page in under an hour using Claude and a design system that won't let AI make it ugly. No designer. No developer. No code.";
+const heroBullets = [
+  "8 conversion-ready templates",
+  "Brand it in one command",
+  "Free hosting on Cloudflare",
+  "Emails flow into your Kit",
+];
+
+const proofStats = [
+  { value: "8", label: "templates" },
+  { value: "33", label: "components" },
+  { value: "<1 hr", label: "to launch" },
+  { value: "$0", label: "hosting" },
+  { value: "1,000+", label: "creators" },
+];
+
+// --- PROBLEM ---
+const problems = [
+  "You ask AI for a landing page and get generic, templated slop.",
+  "A real designer costs thousands and takes weeks.",
+  "Page builders lock you into monthly fees and clunky editors.",
+  "You just want a clean, branded page that converts, fast.",
+];
+
+// --- SOLUTION ---
+const steps = [
+  { title: "Grab the kit", desc: "Copy the template, open it in Claude. The skill walks you through the rest." },
+  { title: "Brand it in one command", desc: "Run /brand-setup and your colours, fonts, and logo land across the whole kit instantly." },
+  { title: "Build and ship", desc: "Pick a template, fill in your copy with Claude, and publish to free hosting." },
+];
+
+// --- STUDENT WINS (rotating, result-led) ---
+const studentWins = [
+  {
+    result: "0 → first opt-in page live in 40 minutes",
+    quote: "I'd been putting off my landing page for nine months. Sat down with the kit on a Sunday and had it live before lunch - no designer, no Webflow rabbit hole.",
+    name: "Maya Okafor",
+    meta: "Fitness coach · @mayabuilds",
+    image: "https://i.pravatar.cc/96?img=15",
+  },
+  {
+    result: "2.3% → 9.1% opt-in rate after the rebuild",
+    quote: "Same traffic, same offer. I just rebuilt the page on the kit and the opt-in rate nearly quadrupled. The structure does the heavy lifting for you.",
+    name: "Devin Rhodes",
+    meta: "Newsletter operator · 11k subs",
+    image: "https://i.pravatar.cc/96?img=33",
+  },
+  {
+    result: "Shipped 3 client pages in one weekend",
+    quote: "I freelance, and this basically became my whole delivery process. Three branded pages, three happy clients, one weekend. It paid for itself on the first project.",
+    name: "Priya Nair",
+    meta: "Freelance designer · @priyaships",
+    image: "https://i.pravatar.cc/96?img=45",
+  },
+  {
+    result: "First $1,240 from a page I built myself",
+    quote: "I always thought I had to hire someone. Turns out I just needed a system that wouldn't let me make it ugly. Filled my first workshop straight off my own page.",
+    name: "Tomás Herrera",
+    meta: "Music educator · @tomasteaches",
+    image: "https://i.pravatar.cc/96?img=52",
+  },
+];
+
+// --- WHAT YOU GET ---
+const deliverables = [
+  { title: "8 conversion templates", desc: "Lead magnets, sales pages, offer pages, thank-you pages and more - tested structures, ready to fill in.", value: "$1,200" },
+  { title: "The /brand-setup skill", desc: "Your colours, fonts, and logo across the entire kit in one command.", value: "$400" },
+  { title: "The /build-page skill", desc: "Tell Claude what you want and it builds the page in your brand, in minutes.", value: "$800" },
+  { title: "The anti-slop design system", desc: "Tokens and components that keep every page clean and on-brand, no matter how you edit it.", value: "$600" },
+  { title: "Kit + Cloudflare wiring", desc: "Email capture into your list and free, fast hosting, set up out of the box.", value: "$300" },
+  { title: "Lifetime updates", desc: "Every new template and feature, yours forever.", value: "$500" },
+];
+
+// --- BONUSES ---
+const bonuses = [
+  { n: "Bonus 01", title: "The Copy Vault", sub: "fill-in-the-blank copy for every section", desc: "Proven headlines, hooks, and CTAs you adapt in minutes.", value: "$200" },
+  { n: "Bonus 02", title: "Brand-in-5 Worksheet", sub: "blank to branded, fast", desc: "Pick colours and fonts that actually look good, even if you're not a designer.", value: "$100" },
+  { n: "Bonus 03", title: "Launch Checklist", sub: "nothing slips through the cracks", desc: "Every step from build to live, in order.", value: "$100" },
+  { n: "Bonus 04", title: "Section Swipe File", sub: "never stare at a blank page", desc: "Heroes, offers, FAQs, and proof blocks ready to drop in.", value: "$150" },
+];
+const superBonus = {
+  title: "Your AI Brain, plugged in",
+  desc: "Connect your own AI knowledge so every page sounds like you, not a robot.",
+  value: "$500",
+};
+const bonusesTotal = "$1,050";
+
+// --- OUTCOMES ---
+const outcomes = [
+  { before: "Generic AI-slop pages", after: "Clean, branded pages that convert" },
+  { before: "Thousands to a designer", after: "Built it yourself in an afternoon" },
+  { before: "Locked into page-builder fees", after: "Own your pages, host them free" },
+  { before: "Staring at a blank editor", after: "Claude builds it with you" },
+];
+
+// --- WHO IT'S FOR ---
+const forYou = [
+  "You're a creator or coach who needs landing pages but isn't a designer or dev.",
+  "You use AI but you're sick of pages that look like everyone else's.",
+  "You want to own your pages, not rent a page builder forever.",
+  "You move fast and want something live this week.",
+  "You're comfortable using Claude, or ready to learn.",
+];
+const notForYou = [
+  "You want a fully custom, hand-coded site from a developer.",
+  "You'll never open Claude or touch a template.",
+  "You need a complex web app, not a landing page.",
+  "You'd rather pay an agency to do the whole thing.",
+  "You're not willing to write your own copy, even with help.",
+];
+
+// --- PROOF / wins ---
+const wins = [
+  { quote: "Had my opt-in page live and branded before lunch. It actually looks like me.", name: "Priya Nadar", role: "Brand strategist", result: "Live in 1 hr", image: "https://i.pravatar.cc/96?img=5" },
+  { quote: "Cancelled my page builder. I own everything now and hosting is free.", name: "Dan Whitfield", role: "Career coach", result: "$0 hosting", image: "https://i.pravatar.cc/96?img=13" },
+  { quote: "The design system means I can't make it ugly. That's the magic.", name: "Elena Rossi", role: "Illustrator", result: "On-brand, always", image: "https://i.pravatar.cc/96?img=9" },
+];
+
+// --- CHECKOUT (membership) ---
+const checkoutDeliverables = deliverables.map((d) => ({ label: d.title, value: d.value }));
+const checkoutBonuses = [
+  ...bonuses.map((b) => ({ label: b.title, value: b.value })),
+  { label: superBonus.title, value: superBonus.value },
+];
+const membership = {
+  monthly: { amount: 49, suffix: "/mo" },
+  annual: { amount: 490, suffix: "/yr" },
+  annualNote: "2 months free",
+  ctaLabel: "Get the kit",
+};
+
+// --- GUARANTEE ---
+const guarantee = {
+  title: "7-day love-it-or-leave-it guarantee",
+  desc: "Try the kit for 7 days. If you're not stoked, just let us know and we'll pay back every dollar - no questions asked.",
+};
+
+// --- ABOUT ---
+const about = {
+  name: "Tom Noske",
+  role: "Founder, Time to Build",
+  bio: "I've built an education business on landing pages, and watched creators waste weeks (and thousands) on theirs. So I packaged the exact system my team uses into a kit you can run yourself, with AI doing the heavy lifting.",
+  image: "https://i.pravatar.cc/640?img=12",
+};
+
+// --- FAQ ---
+const faqs = [
+  { q: "Do I need to know how to code?", a: "No. You talk to Claude in plain English and it builds the pages. If you can write a prompt, you can build a page." },
+  { q: "Do I need Claude Code?", a: "Yes - the kit runs inside Claude. If you can copy a link and follow a few steps, you're set." },
+  { q: "What does hosting cost?", a: "Nothing. The kit deploys to Cloudflare's free tier - fast, global, and $0/month." },
+  { q: "Will my pages look generic?", a: "No. The built-in design system keeps every page clean and on-brand no matter how you edit it. That's the whole point." },
+  { q: "Can I cancel?", a: "Anytime, in two clicks. No contract, and you keep whatever you've built." },
+];
+
+const SECTION = "mx-auto max-w-6xl px-6 py-16 md:py-20";
+const HEADING = "text-3xl font-bold tracking-tight text-ink md:text-4xl";
 ---
 
-<Base title={eyebrow} description={subheadline}>
-  <!-- Full-height shell: header + hero fill exactly one viewport (no scroll on desktop) -->
-  <div class="flex min-h-[100dvh] flex-col">
-    <!-- Brand bar -->
-    <header class="mx-auto w-full max-w-6xl px-6 py-6">
-      <Logo />
-    </header>
+<Base title="Time to Build Funnel Kit" description={heroSubheadline}>
+  <CountdownBar client:load targetDate={closesAt} label="Founding price ends in" />
 
-    <!-- Opt-in hero (asymmetric split) -->
-    <main class="mx-auto flex w-full max-w-6xl flex-1 items-center px-6 py-6">
-      <div class="grid w-full items-center gap-10 lg:grid-cols-2 lg:gap-16">
-        <!-- Left: copy + form (left-aligned). -->
-        <div class="max-w-xl">
-          <span
-            class="inline-flex items-center rounded-full bg-chip px-3 py-1 text-sm font-medium text-chip-ink"
-          >
-            {eyebrow}
-          </span>
+  <SiteNav links={navLinks} ctaLabel="Get the kit" />
 
-          <h1
-            class="mt-5 text-4xl font-bold leading-[1.1] tracking-tight text-ink md:text-5xl"
-          >
-            {headline}
-          </h1>
+  <Hero
+    mode="split"
+    eyebrow="Time to Build Funnel Kit"
+    headline={heroHeadline}
+    subheadline={heroSubheadline}
+    bullets={heroBullets}
+    ctaLabel="Get the kit"
+    secondaryLabel="See how it works"
+    secondaryHref="#how"
+    trustLabel="Used by 1,000+ creators"
+  />
 
-          <p class="mt-4 text-lg leading-relaxed text-ink-muted">{subheadline}</p>
+  <ProofStrip stats={proofStats} />
 
-          <!-- Form block -->
-          <div class="mt-7 max-w-md">
-            <EmailForm client:load submitLabel={submitLabel} />
-          </div>
+  <div data-sticky-sentinel></div>
 
-          <p class="mt-3 text-sm text-ink-muted">No spam. Unsubscribe anytime.</p>
+  <!-- PROBLEM -->
+  <section class="bg-surface-2">
+    <div class={SECTION}>
+      <div class="mx-auto max-w-2xl text-center">
+        <p class="text-sm font-bold uppercase tracking-wide text-brand-600">The problem</p>
+        <h2 class={`mt-3 ${HEADING}`}>AI can build a landing page. It just looks like everyone else's.</h2>
+      </div>
+      <ul class="mx-auto mt-10 grid max-w-3xl gap-4 sm:grid-cols-2">
+        {
+          problems.map((p) => (
+            <li class="flex items-start gap-3 rounded-card border border-line bg-card p-5 text-ink">
+              <span class="mt-0.5 text-lg leading-none text-brand-500">&#10005;</span>
+              <span class="text-base leading-snug">{p}</span>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
 
-          <!-- Trust line -->
-          <div class="mt-4 flex items-center gap-2">
-            <div
-              class="text-base leading-none tracking-wide text-brand-500"
-              aria-hidden="true"
-            >
-              &#9733;&#9733;&#9733;&#9733;&#9733;
+  <!-- SOLUTION -->
+  <section id="how" class="bg-surface">
+    <div class={SECTION}>
+      <div class="mx-auto max-w-2xl text-center">
+        <p class="text-sm font-bold uppercase tracking-wide text-brand-600">How it works</p>
+        <h2 class={`mt-3 ${HEADING}`}>Your AI builder, plus a design system that can't go ugly</h2>
+        <p class="mt-4 text-lg leading-relaxed text-ink-muted">
+          Claude does the building. The kit makes sure it comes out clean, branded, and built to convert.
+        </p>
+      </div>
+      <div class="mt-12 grid gap-6 md:grid-cols-3">
+        {
+          steps.map((s, i) => (
+            <div class="rounded-card border border-line bg-card p-6">
+              <span class="flex h-9 w-9 items-center justify-center rounded-full bg-chip text-sm font-bold text-chip-ink">
+                {i + 1}
+              </span>
+              <h3 class="mt-4 text-lg font-bold text-ink">{s.title}</h3>
+              <p class="mt-2 text-sm leading-relaxed text-ink-muted">{s.desc}</p>
             </div>
-            <span class="text-sm font-medium text-ink-muted">{trustLine}</span>
-          </div>
-        </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
 
-        <!-- Right: visual + objection handles (desktop only) -->
-        <div class="hidden lg:flex lg:flex-col lg:items-center lg:pl-6">
-          <div
-            class="w-full max-w-sm overflow-hidden rounded-card border border-line bg-surface-2 shadow-xl shadow-black/5"
-          >
-            <img
-              src={assetImage}
-              alt={assetAlt}
-              width="1000"
-              height="1200"
-              class="h-auto w-full"
-              loading="eager"
-            />
-          </div>
+  <!-- STUDENT WINS (rotating, result-led) -->
+  <StudentWins
+    eyebrow="Student wins"
+    heading="Results from people who shipped"
+    subheading="Real creators, real pages, real numbers - built with the same kit you're getting."
+    wins={studentWins}
+  />
 
-          <ul class="mt-6 w-full max-w-sm space-y-3">
+  <!-- WHAT YOU GET -->
+  <section id="included" class="bg-surface-2">
+    <div class={SECTION}>
+      <div class="mx-auto max-w-2xl text-center">
+        <p class="text-sm font-bold uppercase tracking-wide text-brand-600">Everything included</p>
+        <h2 class={`mt-3 ${HEADING}`}>Here's exactly what you get</h2>
+      </div>
+      <div class="mx-auto mt-12 max-w-4xl border-t border-line">
+        {
+          deliverables.map((d) => (
+            <div class="border-b border-line py-7">
+              <div class="flex items-start justify-between gap-4">
+                <h3 class="text-xl font-bold text-ink md:text-2xl">{d.title}</h3>
+                <span class="mt-1 shrink-0 rounded-full border border-line px-3 py-1 text-[11px] font-medium uppercase tracking-wide text-ink-muted">
+                  {d.value} value
+                </span>
+              </div>
+              <p class="mt-2 max-w-2xl text-base leading-relaxed text-ink-muted">{d.desc}</p>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- BONUSES -->
+  <section class="bg-surface">
+    <div class={SECTION}>
+      <div class="mx-auto max-w-2xl text-center">
+        <p class="text-sm font-bold uppercase tracking-wide text-brand-600">+ Included free</p>
+        <h2 class={`mt-3 ${HEADING}`}>Stacked bonuses</h2>
+      </div>
+
+      <div class="mt-12 grid gap-6 md:grid-cols-2">
+        {
+          bonuses.map((b) => (
+            <div class="rounded-card border border-line bg-card p-6">
+              <span class="inline-flex items-center rounded-md bg-chip px-2.5 py-1 text-xs font-bold uppercase tracking-wide text-chip-ink">
+                {b.n}
+              </span>
+              <h3 class="mt-4 text-lg font-bold text-ink">{b.title}</h3>
+              <p class="mt-1 text-sm font-semibold text-brand-600">{b.sub}</p>
+              <p class="mt-2 text-sm leading-relaxed text-ink-muted">{b.desc}</p>
+              <p class="mt-4 text-sm font-semibold text-ink">
+                <span class="text-ink-muted line-through">{b.value}</span>
+                <span class="mx-1 text-brand-500">&#8594;</span>
+                <span class="text-brand-600">FREE</span>
+              </p>
+            </div>
+          ))
+        }
+      </div>
+
+      <div class="mt-6 rounded-card border-2 border-brand-500 bg-card p-6 text-center md:p-8">
+        <span class="inline-flex items-center rounded-md bg-brand-500 px-2.5 py-1 text-xs font-bold uppercase tracking-wide text-brand-ink">
+          Super bonus
+        </span>
+        <h3 class="mt-4 text-xl font-bold text-ink">{superBonus.title}</h3>
+        <p class="mx-auto mt-2 max-w-xl text-sm leading-relaxed text-ink-muted">{superBonus.desc}</p>
+        <p class="mt-4 text-sm font-semibold">
+          <span class="text-ink-muted line-through">{superBonus.value}</span>
+          <span class="mx-1 text-brand-500">&#8594;</span>
+          <span class="text-brand-600">FREE</span>
+        </p>
+      </div>
+
+      <div class="mt-6 rounded-card bg-surface-dark p-8 text-center text-ink-dark">
+        <p class="text-xs font-semibold uppercase tracking-wide text-ink-dark/60">Bonuses total value</p>
+        <p class="mt-2 text-4xl font-extrabold text-brand-400">{bonusesTotal}</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- OUTCOMES -->
+  <section class="bg-surface-2">
+    <div class={SECTION}>
+      <div class="mx-auto max-w-2xl text-center">
+        <p class="text-sm font-bold uppercase tracking-wide text-brand-600">What changes</p>
+        <h2 class={`mt-3 ${HEADING}`}>From AI slop to pages that sell</h2>
+      </div>
+      <div class="mx-auto mt-10 max-w-2xl divide-y divide-line overflow-hidden rounded-card border border-line bg-card">
+        {
+          outcomes.map((o) => (
+            <div class="grid grid-cols-[1fr_auto_1fr] items-center gap-3 px-5 py-4 text-sm sm:gap-5 sm:px-6">
+              <span class="text-ink-muted line-through">{o.before}</span>
+              <span class="text-brand-500" aria-hidden="true">&#8594;</span>
+              <span class="font-semibold text-ink">{o.after}</span>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- WHO IT'S FOR -->
+  <section class="bg-surface">
+    <div class={SECTION}>
+      <div class="mx-auto max-w-2xl text-center">
+        <p class="text-sm font-bold uppercase tracking-wide text-brand-600">Who it's for</p>
+        <h2 class={`mt-3 ${HEADING}`}>Read this before you buy</h2>
+      </div>
+      <div class="mx-auto mt-12 grid max-w-4xl gap-6 md:grid-cols-2">
+        <div class="rounded-card bg-surface-dark p-7 text-ink-dark md:p-8">
+          <h3 class="text-xl font-bold">This is for you if</h3>
+          <ul class="mt-5 space-y-4">
             {
-              objections.map((o) => (
-                <li class="flex items-center gap-3 text-ink">
-                  <span class="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-brand-500">
-                    <svg
-                      class="h-3 w-3 text-brand-ink"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="3"
-                      aria-hidden="true"
-                    >
+              forYou.map((item) => (
+                <li class="flex items-start gap-3">
+                  <span class="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-brand-500">
+                    <svg class="h-3 w-3 text-brand-ink" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true">
                       <path stroke-linecap="round" stroke-linejoin="round" d="m5 13 4 4 10-12" />
                     </svg>
                   </span>
-                  <span class="text-base">{o}</span>
+                  <span class="text-sm leading-relaxed">{item}</span>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+        <div class="rounded-card border border-line bg-card p-7 md:p-8">
+          <h3 class="text-xl font-bold text-ink">This isn't for you if</h3>
+          <ul class="mt-5 space-y-4">
+            {
+              notForYou.map((item) => (
+                <li class="flex items-start gap-3">
+                  <span class="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-ink-muted/15 text-ink-muted">
+                    <svg class="h-3 w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true">
+                      <path d="m6 6 12 12" />
+                      <path d="m18 6-12 12" />
+                    </svg>
+                  </span>
+                  <span class="text-sm leading-relaxed text-ink-muted">{item}</span>
                 </li>
               ))
             }
           </ul>
         </div>
       </div>
-    </main>
-  </div>
+    </div>
+  </section>
+
+  <!-- PROOF / STUDENT WINS -->
+  <section class="bg-surface-2">
+    <div class={SECTION}>
+      <div class="mx-auto max-w-2xl text-center">
+        <p class="text-sm font-bold uppercase tracking-wide text-brand-600">Real results</p>
+        <h2 class={`mt-3 ${HEADING}`}>What creators are saying</h2>
+      </div>
+      <div class="mt-12 grid gap-6 md:grid-cols-3">
+        {
+          wins.map((w) => (
+            <div class="flex flex-col rounded-card border border-line bg-card p-6">
+              <div class="flex text-sm leading-none tracking-wide text-brand-500" aria-hidden="true">
+                &#9733;&#9733;&#9733;&#9733;&#9733;
+              </div>
+              <p class="mt-4 flex-1 text-base leading-relaxed text-ink">&#8220;{w.quote}&#8221;</p>
+              <div class="mt-5 flex items-center gap-3 border-t border-line pt-4">
+                <img
+                  src={w.image}
+                  alt={w.name}
+                  width="40"
+                  height="40"
+                  class="h-10 w-10 shrink-0 rounded-full object-cover"
+                  loading="lazy"
+                />
+                <div class="min-w-0 flex-1">
+                  <p class="truncate text-sm font-semibold text-ink">{w.name}</p>
+                  <p class="truncate text-xs text-ink-muted">{w.role}</p>
+                </div>
+                <span class="shrink-0 rounded-full bg-chip px-2.5 py-1 text-xs font-bold text-chip-ink">{w.result}</span>
+              </div>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- CHECKOUT (membership) -->
+  <CheckoutCard
+    eyebrow="Your checkout"
+    title="Get the kit"
+    deliverables={checkoutDeliverables}
+    bonuses={checkoutBonuses}
+    totalValue="$4,850"
+    membership={membership}
+    badges={["Cancel anytime", "Free hosting included", "Lifetime updates"]}
+  />
+
+  <!-- GUARANTEE -->
+  <section class="bg-surface-2">
+    <div class="mx-auto max-w-3xl px-6 py-16 md:py-20">
+      <div class="rounded-card border border-line bg-card p-8 text-center md:p-10">
+        <span class="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-chip">
+          <svg class="h-6 w-6 text-chip-ink" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z" />
+            <path d="m9 12 2 2 4-4" />
+          </svg>
+        </span>
+        <h2 class="mt-5 text-2xl font-bold tracking-tight text-ink md:text-3xl">{guarantee.title}</h2>
+        <p class="mx-auto mt-3 max-w-xl text-base leading-relaxed text-ink-muted">{guarantee.desc}</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="bg-surface">
+    <div class={SECTION}>
+      <div class="grid items-center gap-10 md:grid-cols-[2fr_3fr] md:gap-14">
+        <div class="overflow-hidden rounded-card border border-line bg-surface-2">
+          <img src={about.image} alt={about.name} width="640" height="640" class="h-auto w-full" loading="lazy" />
+        </div>
+        <div>
+          <p class="text-sm font-bold uppercase tracking-wide text-brand-600">About</p>
+          <h2 class={`mt-3 ${HEADING}`}>Hi, I'm {about.name}</h2>
+          <p class="mt-2 text-base font-medium text-ink-muted">{about.role}</p>
+          <p class="mt-5 text-lg leading-relaxed text-ink-muted">{about.bio}</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq" class="bg-surface-2">
+    <div class="mx-auto max-w-3xl px-6 py-16 md:py-20">
+      <div class="mx-auto max-w-2xl text-center">
+        <p class="text-sm font-bold uppercase tracking-wide text-brand-600">Questions</p>
+        <h2 class={`mt-3 ${HEADING}`}>Frequently asked questions</h2>
+      </div>
+      <div class="mt-10">
+        <Faq items={faqs} />
+      </div>
+    </div>
+  </section>
+
+  <!-- FINAL CTA -->
+  <section class="bg-surface-dark text-ink-dark">
+    <div class="mx-auto max-w-3xl px-6 py-20 text-center md:py-24">
+      <h2 class="text-3xl font-extrabold tracking-tight md:text-4xl">
+        Build a page that actually converts, today
+      </h2>
+      <p class="mx-auto mt-4 max-w-xl text-lg leading-relaxed text-ink-dark/70">
+        Grab the kit, brand it in one command, and have a landing page live this afternoon.
+      </p>
+      <div class="mt-8 flex justify-center">
+        <CtaButton label="Get the kit" />
+      </div>
+      <p class="mt-4 text-xs uppercase tracking-wide text-ink-dark/50">
+        Cancel anytime &middot; free hosting included
+      </p>
+    </div>
+  </section>
+
+  <SiteFooter tagline="Simple, AI-powered landing pages that convert." />
+
+  <StickyCta label="Get the kit" note="Time to Build Funnel Kit" />
+
+  <ThemeCustomizer />
 </Base>

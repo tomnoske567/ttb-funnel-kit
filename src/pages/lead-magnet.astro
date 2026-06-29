@@ -1,0 +1,117 @@
+---
+import Base from "../layouts/Base.astro";
+import EmailForm from "../components/EmailForm.tsx";
+import Logo from "../components/Logo.astro";
+
+// ============================================================
+// LEAD MAGNET TEMPLATE - fill in the blanks
+// Swap the copy below for your offer. Structure stays as-is.
+// ============================================================
+const eyebrow = "Free Worksheet";
+const headline = "Turn your skills into an offer that sells";
+const subheadline =
+  "Get the one-page worksheet that helps you package what you already know into a paid offer in an afternoon.";
+const submitLabel = "Send me the worksheet";
+
+// Social-proof line under the form. Replace with your real proof.
+const trustLine = "Trusted by 1,000+ creators";
+
+// Objection-handle stack under the image. Answer the reader's "yeah, but..." doubts.
+const objections = [
+  "Built from offers that have actually sold",
+  "Takes an afternoon, not another course",
+  "Works whether you coach, create, or consult",
+];
+
+// Replace with your lead magnet cover / mockup (recommended ~1000x1200).
+const assetImage = "https://picsum.photos/seed/ttb-worksheet/1000/1200";
+const assetAlt = "Preview of the free worksheet";
+---
+
+<Base title={eyebrow} description={subheadline}>
+  <!-- Full-height shell: header + hero fill exactly one viewport (no scroll on desktop) -->
+  <div class="flex min-h-[100dvh] flex-col">
+    <!-- Brand bar -->
+    <header class="mx-auto w-full max-w-6xl px-6 py-6">
+      <Logo />
+    </header>
+
+    <!-- Opt-in hero (asymmetric split) -->
+    <main class="mx-auto flex w-full max-w-6xl flex-1 items-center px-6 py-6">
+      <div class="grid w-full items-center gap-10 lg:grid-cols-2 lg:gap-16">
+        <!-- Left: copy + form (left-aligned). -->
+        <div class="max-w-xl">
+          <span
+            class="inline-flex items-center rounded-full bg-chip px-3 py-1 text-sm font-medium text-chip-ink"
+          >
+            {eyebrow}
+          </span>
+
+          <h1
+            class="mt-5 text-4xl font-bold leading-[1.1] tracking-tight text-ink md:text-5xl"
+          >
+            {headline}
+          </h1>
+
+          <p class="mt-4 text-lg leading-relaxed text-ink-muted">{subheadline}</p>
+
+          <!-- Form block -->
+          <div class="mt-7 max-w-md">
+            <EmailForm client:load submitLabel={submitLabel} />
+          </div>
+
+          <p class="mt-3 text-sm text-ink-muted">No spam. Unsubscribe anytime.</p>
+
+          <!-- Trust line -->
+          <div class="mt-4 flex items-center gap-2">
+            <div
+              class="text-base leading-none tracking-wide text-brand-500"
+              aria-hidden="true"
+            >
+              &#9733;&#9733;&#9733;&#9733;&#9733;
+            </div>
+            <span class="text-sm font-medium text-ink-muted">{trustLine}</span>
+          </div>
+        </div>
+
+        <!-- Right: visual + objection handles (desktop only) -->
+        <div class="hidden lg:flex lg:flex-col lg:items-center lg:pl-6">
+          <div
+            class="w-full max-w-sm overflow-hidden rounded-card border border-line bg-surface-2 shadow-xl shadow-black/5"
+          >
+            <img
+              src={assetImage}
+              alt={assetAlt}
+              width="1000"
+              height="1200"
+              class="h-auto w-full"
+              loading="eager"
+            />
+          </div>
+
+          <ul class="mt-6 w-full max-w-sm space-y-3">
+            {
+              objections.map((o) => (
+                <li class="flex items-center gap-3 text-ink">
+                  <span class="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-brand-500">
+                    <svg
+                      class="h-3 w-3 text-brand-ink"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="3"
+                      aria-hidden="true"
+                    >
+                      <path stroke-linecap="round" stroke-linejoin="round" d="m5 13 4 4 10-12" />
+                    </svg>
+                  </span>
+                  <span class="text-base">{o}</span>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+      </div>
+    </main>
+  </div>
+</Base>

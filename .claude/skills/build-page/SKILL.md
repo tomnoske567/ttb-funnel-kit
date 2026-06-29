@@ -22,9 +22,9 @@ Ask (briefly) or infer from what they said:
 
 | They want… | Use | Route file |
 |---|---|---|
-| A free lead magnet / email opt-in (short, form-first) | **Lead magnet** | `src/pages/index.astro` |
+| A free lead magnet / email opt-in (short, form-first) | **Lead magnet** | `src/pages/lead-magnet.astro` |
 | A long-form, story-driven sales pitch | **Sales letter** | `src/pages/sales-letter.astro` |
-| A full offer page (hero, problem, proof, pricing, FAQ) | **Offer page** | `src/pages/offer.astro` |
+| A full offer page (hero, problem, proof, pricing, FAQ) | **Offer page** | `src/pages/index.astro` (the home page `/`) |
 
 Ask whether this should **replace** one of those starter pages or be a **new
 route**. For a new route, copy the chosen template to `src/pages/<slug>.astro`

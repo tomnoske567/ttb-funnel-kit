@@ -52,9 +52,9 @@ run `/brand-setup` and tell Claude — it bakes those choices in permanently.
 
 | Page | Route | Best for |
 |---|---|---|
-| Lead magnet | `/` | A free download / email opt-in |
+| Offer page | `/` | A full sales page with pricing + FAQ (the home page) |
+| Lead magnet | `/lead-magnet` | A free download / email opt-in |
 | Sales letter | `/sales-letter` | A story-driven, long-form pitch |
-| Offer page | `/offer` | A full sales page with pricing + FAQ |
 | Showcase | `/showcase` | Preview of the hero layouts (internal) |
 
 Edit copy by hand in `src/pages/*.astro`, or just ask Claude.
