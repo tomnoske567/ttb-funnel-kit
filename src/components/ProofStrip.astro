@@ -1,5 +1,8 @@
 ---
 // A row of headline stats for quick credibility, right under the hero.
+// Desktop: an even multi-column grid. Mobile: stacked rows (big number left,
+// label right, hairline dividers) with an eyebrow pill - the grid's 2:2:1
+// wrap looks cheap on small screens.
 interface Stat {
   value: string; // e.g. "1,000+"
   label: string; // e.g. "students"
@@ -9,31 +12,58 @@ interface Props {
   stats: Stat[];
   /** Dark band (inverted) vs light. Default dark, like most offer pages. */
   tone?: "dark" | "light";
+  /** Mobile-only eyebrow pill above the stacked stats. */
+  eyebrow?: string;
 }
 
-const { stats, tone = "dark" } = Astro.props;
+const { stats, tone = "dark", eyebrow = "Why you need this" } = Astro.props;
 const isDark = tone === "dark";
+
+const labelColor = isDark ? "text-ink-dark/55" : "text-ink-muted";
+const dividerColor = isDark ? "divide-ink-dark/12" : "divide-line";
+const pillLook = isDark ? "border-ink-dark/25 text-ink-dark" : "border-ink/15 text-ink";
 ---
 
 <section class={isDark ? "bg-surface-dark text-ink-dark" : "bg-surface-2 text-ink"}>
   <div class="mx-auto max-w-6xl px-6 py-10">
-    <div class="grid grid-cols-2 gap-x-6 gap-y-8 sm:grid-cols-3 lg:grid-cols-5">
+    <!-- Desktop: even grid (unchanged) -->
+    <div class="hidden gap-x-6 lg:grid lg:grid-cols-5">
       {
         stats.map((s) => (
           <div class="text-center">
-            <div class="text-3xl font-extrabold tracking-tight md:text-4xl">
-              {s.value}
-            </div>
-            <div
-              class={`mt-1 text-xs font-medium uppercase tracking-wide ${
-                isDark ? "text-ink-dark/60" : "text-ink-muted"
-              }`}
-            >
+            <div class="text-4xl font-extrabold tracking-tight">{s.value}</div>
+            <div class={`mt-1 text-xs font-medium uppercase tracking-wide ${labelColor}`}>
               {s.label}
             </div>
           </div>
         ))
       }
+    </div>
+
+    <!-- Mobile / tablet: eyebrow pill + stacked rows -->
+    <div class="lg:hidden">
+      {
+        eyebrow && (
+          <span
+            class={`inline-flex items-center gap-2 rounded-full border bg-transparent px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] ${pillLook}`}
+          >
+            <span class="opacity-50">//</span>
+            {eyebrow}
+          </span>
+        )
+      }
+      <div class={`mt-8 divide-y ${dividerColor}`}>
+        {
+          stats.map((s) => (
+            <div class="flex items-baseline justify-between gap-4 py-5">
+              <div class="text-4xl font-extrabold tracking-tight">{s.value}</div>
+              <div class={`text-xs font-medium uppercase tracking-wide ${labelColor}`}>
+                {s.label}
+              </div>
+            </div>
+          ))
+        }
+      </div>
     </div>
   </div>
 </section>
