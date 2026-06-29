@@ -71,7 +71,28 @@ The logo is text (`{site.name}`) + an arrow mark in `src/components/Logo.astro`.
 If they want a different icon or an image logo, edit that file. Otherwise the
 name from config is enough.
 
-## Step 3 - Confirm
+## Step 3 - Strip the demo-only bits (ask first)
+
+The template ships with pieces that exist for the DEMO, not a live customer
+site. Offer to remove them (ask - they may want to keep some while still
+experimenting with looks):
+
+- **The Customise Theme panel** — `<ThemeCustomizer />` (the floating gear,
+  bottom-right) is a *preview* tool. Real visitors should NOT see it. Once their
+  brand is locked, remove the `import ThemeCustomizer` line and the
+  `<ThemeCustomizer />` usage from `src/pages/index.astro` (and
+  `src/pages/showcase.astro` if kept). The component file can be deleted too.
+- **The `/showcase` page** (`src/pages/showcase.astro`) — an internal hero-mode
+  gallery. Delete it for a real site.
+- **The countdown bar** — `<CountdownBar />` on the home page. Remove it unless
+  they have a genuine deadline / scarcity.
+- **Placeholder identity** — the demo ships with TOM's photo
+  (`public/images/about-tom.jpg`), Time to Build copy, and stock avatar images
+  on the testimonial/wins cards. Make sure the About photo, every line of copy,
+  and the proof are the STUDENT'S, not the demo's. (Use `/build-page` for the
+  copy.)
+
+## Step 4 - Confirm
 
 1. Run `npm run dev` (or tell them to) and give them the local URL.
 2. Summarise exactly what you changed (name, theme, hue, radius, Kit, checkout).

@@ -50,8 +50,12 @@ of the file (e.g. `heroHeadline`, `heroBullets`, `problems`, `steps`,
   or `mode="text"` (copy only). Pick what fits; for `vsl` set `videoUrl`.
 - The checkout card takes either a one-time `options` array (with split-pay) or a
   `membership` object (monthly/annual). Use whichever matches their pricing.
-- Images use `https://picsum.photos/...` placeholders - tell them where to drop
-  their real images (`public/images/` then reference `/images/your-file.jpg`).
+- Images are placeholders - replace them all: stock avatars on the
+  testimonial/wins cards, `picsum.photos` mockups, and the About photo
+  (`public/images/about-tom.jpg` is the DEMO founder photo - swap for the
+  student's). Real images go in `public/images/`, referenced as
+  `/images/your-file.jpg`. AdobeRGB photos must be converted to sRGB before
+  resizing or the colour strips out (see CLAUDE.md).
 
 ### Forms
 The opt-in forms already post to the Kit form set in `config.ts`. If
