@@ -1,0 +1,147 @@
+---
+// Reusable accordion: animated open/close, one open at a time.
+interface Props {
+  items: { q: string; a: string }[];
+}
+const { items } = Astro.props;
+---
+
+<div class="faq" data-faq>
+  {
+    items.map((f) => (
+      <div class="faq-item" data-faq-item>
+        <button type="button" class="faq-q" data-faq-trigger aria-expanded="false">
+          <span>{f.q}</span>
+          <svg
+            class="faq-chev"
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <path d="m6 9 6 6 6-6" />
+          </svg>
+        </button>
+        <div class="faq-panel" data-faq-panel>
+          <div class="faq-answer">
+            <p>{f.a}</p>
+          </div>
+        </div>
+      </div>
+    ))
+  }
+</div>
+
+<script>
+  const DURATION = 400;
+  const EASING = "cubic-bezier(0.65, 0, 0.35, 1)";
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  document.querySelectorAll("[data-faq]").forEach((faq) => {
+    const items = Array.from(faq.querySelectorAll("[data-faq-item]"));
+    let openItem: Element | null = null;
+    const panelOf = (item: Element) => item.querySelector("[data-faq-panel]") as HTMLElement;
+    const triggerOf = (item: Element) => item.querySelector("[data-faq-trigger]") as HTMLElement;
+
+    function close(item: Element) {
+      const panel = panelOf(item);
+      item.removeAttribute("data-open");
+      triggerOf(item).setAttribute("aria-expanded", "false");
+      if (reduce) {
+        panel.style.height = "0px";
+        return;
+      }
+      panel.style.height = panel.scrollHeight + "px";
+      void panel.offsetHeight;
+      panel.style.height = "0px";
+    }
+
+    function open(item: Element) {
+      const panel = panelOf(item);
+      item.setAttribute("data-open", "");
+      triggerOf(item).setAttribute("aria-expanded", "true");
+      if (reduce) {
+        panel.style.height = "auto";
+        return;
+      }
+      panel.style.height = panel.scrollHeight + "px";
+      const onEnd = (e: TransitionEvent) => {
+        if (e.propertyName !== "height") return;
+        panel.removeEventListener("transitionend", onEnd);
+        if (item.hasAttribute("data-open")) panel.style.height = "auto";
+      };
+      panel.addEventListener("transitionend", onEnd);
+    }
+
+    items.forEach((item) => {
+      const panel = panelOf(item);
+      panel.style.transition = `height ${DURATION}ms ${EASING}`;
+      panel.style.height = "0px";
+      triggerOf(item).addEventListener("click", () => {
+        if (item.hasAttribute("data-open")) {
+          close(item);
+          openItem = null;
+          return;
+        }
+        if (openItem && openItem !== item) close(openItem);
+        open(item);
+        openItem = item;
+      });
+    });
+  });
+</script>
+
+<style>
+  .faq {
+    border-top: 1px solid var(--color-line);
+  }
+  .faq-item {
+    border-bottom: 1px solid var(--color-line);
+  }
+  .faq-q {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    width: 100%;
+    padding: 1.1rem 0;
+    border: none;
+    background: none;
+    cursor: pointer;
+    text-align: left;
+    font: inherit;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--color-ink);
+  }
+  .faq-chev {
+    flex-shrink: 0;
+    color: var(--color-ink-muted);
+    transition: transform 400ms cubic-bezier(0.65, 0, 0.35, 1);
+  }
+  .faq-item[data-open] .faq-chev {
+    transform: rotate(180deg);
+  }
+  .faq-panel {
+    height: 0;
+    overflow: hidden;
+  }
+  .faq-answer {
+    padding-bottom: 1.1rem;
+    color: var(--color-ink-muted);
+    line-height: 1.7;
+  }
+  .faq-answer p {
+    margin: 0;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .faq-chev {
+      transition: none;
+    }
+  }
+</style>

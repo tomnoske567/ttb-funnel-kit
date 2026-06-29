@@ -1,0 +1,45 @@
+---
+import { site } from "../config";
+
+interface Props {
+  label: string;
+  href?: string;
+  size?: "md" | "lg";
+  variant?: "solid" | "outline";
+  class?: string;
+}
+
+const {
+  label,
+  href = site.checkoutUrl,
+  size = "lg",
+  variant = "solid",
+  class: cls = "",
+} = Astro.props;
+
+const pad = size === "lg" ? "px-8 py-4 text-base" : "px-6 py-3 text-sm";
+const look =
+  variant === "solid"
+    ? "bg-brand-500 text-brand-ink hover:bg-brand-600"
+    : "border border-line bg-secondary text-secondary-ink hover:border-ink/40";
+---
+
+<a
+  href={href}
+  class={`inline-flex items-center justify-center gap-2 rounded-control [font-weight:var(--btn-weight)] [text-transform:var(--btn-transform)] transition active:translate-y-px ${pad} ${look} ${cls}`}
+>
+  {label}
+  <svg
+    class="h-4 w-4"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2.5"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    aria-hidden="true"
+  >
+    <path d="M5 12h14" />
+    <path d="m12 5 7 7-7 7" />
+  </svg>
+</a>

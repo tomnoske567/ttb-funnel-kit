@@ -1,0 +1,519 @@
+---
+// Customise Theme panel - a floating, preview-only control centre for the
+// demo. Everything it changes is a CSS variable, persisted to localStorage
+// and re-applied before paint (see Base.astro). Students run /brand-setup to
+// bake their choices in permanently; this panel never edits files.
+//
+// The extra preview fonts are imported HERE (not in global.css) so they only
+// load on pages that actually mount the customizer.
+import "@fontsource-variable/space-grotesk";
+import "@fontsource-variable/sora";
+import "@fontsource-variable/plus-jakarta-sans";
+import "@fontsource-variable/geist";
+import "@fontsource-variable/work-sans";
+import { site } from "../config";
+
+const headingFonts = [
+  { label: "Outfit", stack: '"Outfit Variable", "Outfit", ui-sans-serif, sans-serif' },
+  { label: "Space Grotesk", stack: '"Space Grotesk Variable", ui-sans-serif, sans-serif' },
+  { label: "Sora", stack: '"Sora Variable", ui-sans-serif, sans-serif' },
+  { label: "Plus Jakarta Sans", stack: '"Plus Jakarta Sans Variable", ui-sans-serif, sans-serif' },
+];
+const bodyFonts = [
+  { label: "Inter", stack: '"Inter Variable", ui-sans-serif, system-ui, sans-serif' },
+  { label: "Geist", stack: '"Geist Variable", ui-sans-serif, sans-serif' },
+  { label: "Plus Jakarta Sans", stack: '"Plus Jakarta Sans Variable", ui-sans-serif, sans-serif' },
+  { label: "Work Sans", stack: '"Work Sans Variable", ui-sans-serif, sans-serif' },
+];
+const headingWeights = [
+  { label: "600 Semibold", value: "600" },
+  { label: "700 Bold", value: "700" },
+  { label: "800 Extrabold", value: "800" },
+];
+const buttonWeights = [
+  { label: "500 Medium", value: "500" },
+  { label: "600 Semibold", value: "600" },
+  { label: "700 Bold", value: "700" },
+];
+const radii = ["0", "4px", "8px", "12px", "16px", "24px"];
+const swatchHues = [15, 40, 60, 110, 145, 162, 185, 210, 240, 264, 295, 330];
+
+// Full themes (complete palette swaps). Each `id` matches a
+// [data-theme-preset="id"] block in global.css. `swatches` are just the
+// preview circles - light surfaces left, accent on the right.
+const themes = [
+  {
+    id: "default",
+    label: "Default",
+    swatches: ["oklch(100% 0 0)", "oklch(96% 0 0)", "oklch(90% 0 0)", "oklch(22% 0 0)", "oklch(72% 0.16 185)"],
+  },
+  {
+    id: "sage",
+    label: "Sage",
+    swatches: ["#f8f7f4", "#e8e6e1", "#1a1f2e", "#7c9082"],
+    radius: "4px",
+  },
+  {
+    id: "nature",
+    label: "Nature",
+    swatches: ["#f8f5f0", "#f0e9e0", "#e0d6c9", "#3e2723", "#2e7d32"],
+  },
+  {
+    id: "brutalist",
+    label: "Brutalist",
+    swatches: ["#ffffff", "#f0f0f0", "#000000", "#ff3333"],
+    radius: "0px", // this theme forces sharp corners
+  },
+  {
+    id: "linen",
+    label: "Linen",
+    swatches: ["#e9e4d8", "#f4efe4", "#d2cbbb", "#5e5a52", "#2e2e2e"],
+  },
+  {
+    id: "amber",
+    label: "Amber",
+    swatches: ["#ffffff", "#f3f4f6", "#111827", "#5f8787", "#d87943"],
+    radius: "12px",
+  },
+  {
+    id: "retro",
+    label: "Retro",
+    swatches: ["#fdf6e3", "#eee8d5", "#073642", "#2aa198", "#d33682"],
+    radius: "4px",
+  },
+  {
+    id: "ocean",
+    label: "Ocean",
+    swatches: ["#ffffff", "#f5f5f5", "#dcdcdc", "#1a1a1a", "oklch(0.5 0.134 242.749)"],
+    radius: "12px",
+  },
+];
+
+const selectClass =
+  "w-full appearance-none rounded-control border border-line bg-surface-2 px-3 py-2.5 text-sm text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500";
+const labelClass = "text-xs font-bold uppercase tracking-wide text-ink-muted";
+---
+
+<!-- Gear button -->
+<div
+  class="fixed bottom-20 right-4 z-50 lg:bottom-6 lg:right-6"
+  data-cz-fab
+>
+  <button
+    type="button"
+    data-cz-open
+    aria-label="Customise theme"
+    class="flex h-12 w-12 items-center justify-center rounded-full border border-line bg-card text-ink shadow-lg shadow-black/20 transition hover:scale-105 active:scale-95"
+  >
+    <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <circle cx="12" cy="12" r="3" />
+      <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z" />
+    </svg>
+  </button>
+</div>
+
+<!-- Panel -->
+<div
+  data-cz-panel
+  class="fixed bottom-5 right-4 z-50 flex max-h-[85vh] w-[min(92vw,360px)] translate-y-2 flex-col overflow-hidden rounded-2xl border border-line bg-card opacity-0 shadow-2xl shadow-black/30 transition duration-200 pointer-events-none lg:bottom-6 lg:right-6"
+>
+  <!-- Header -->
+  <div class="flex items-center justify-between border-b border-line px-5 py-4">
+    <h2 class="text-base font-bold text-ink">Customise Theme</h2>
+    <button type="button" data-cz-close aria-label="Close" class="text-ink-muted transition-colors hover:text-ink">
+      <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+        <path d="m6 6 12 12M18 6 6 18" />
+      </svg>
+    </button>
+  </div>
+
+  <!-- Scroll body -->
+  <div class="flex-1 space-y-6 overflow-y-auto px-5 py-5">
+    <!-- Full theme -->
+    <div>
+      <p class={labelClass}>Theme</p>
+      <div class="mt-2 grid grid-cols-2 gap-2">
+        {
+          themes.map((t) => (
+            <button
+              type="button"
+              data-cz-theme={t.id}
+              data-cz-theme-radius={t.radius}
+              data-active="false"
+              class="flex items-center gap-2.5 rounded-control border border-line px-3 py-2 text-left transition hover:border-ink/30 data-[active=true]:border-brand-500 data-[active=true]:ring-1 data-[active=true]:ring-brand-500"
+            >
+              <span class="flex -space-x-1.5">
+                {t.swatches.map((c) => (
+                  <span class="h-4 w-4 rounded-full border border-card" style={`background-color: ${c}`} />
+                ))}
+              </span>
+              <span class="text-xs font-medium text-ink">{t.label}</span>
+            </button>
+          ))
+        }
+      </div>
+    </div>
+
+    <!-- Dark mode -->
+    <div class="flex items-center justify-between">
+      <span class="text-sm font-semibold text-ink">Dark Mode</span>
+      <button
+        type="button"
+        data-cz-dark
+        role="switch"
+        aria-checked="false"
+        aria-label="Toggle dark mode"
+        class="group relative inline-flex h-7 w-12 shrink-0 items-center rounded-full bg-line transition-colors data-[on=true]:bg-brand-500"
+      >
+        <span class="ml-1 h-5 w-5 rounded-full bg-white shadow transition-transform group-data-[on=true]:translate-x-5"></span>
+      </button>
+    </div>
+
+    <!-- Brand colour -->
+    <div data-cz-brandcolor class="transition-opacity">
+      <div class="flex items-center justify-between">
+        <p class={labelClass}>Brand Color</p>
+        <span data-cz-brandcolor-hint class="hidden text-[10px] font-medium lowercase text-ink-muted">
+          set by theme
+        </span>
+      </div>
+      <input
+        type="range"
+        min="0"
+        max="360"
+        value="185"
+        data-cz-hue
+        aria-label="Brand hue"
+        class="mt-3 h-2 w-full cursor-pointer appearance-none rounded-full"
+        style="background: linear-gradient(to right, oklch(72% 0.16 0), oklch(72% 0.16 45), oklch(72% 0.16 90), oklch(72% 0.16 135), oklch(72% 0.16 180), oklch(72% 0.16 225), oklch(72% 0.16 270), oklch(72% 0.16 315), oklch(72% 0.16 360));"
+      />
+      <div class="mt-3 flex flex-wrap gap-2">
+        {
+          swatchHues.map((h) => (
+            <button
+              type="button"
+              data-cz-swatch={h}
+              aria-label={`Hue ${h}`}
+              class="h-6 w-6 rounded-full border border-line ring-2 ring-transparent ring-offset-2 ring-offset-card transition focus-visible:outline-none data-[active=true]:ring-brand-500"
+              style={`background-color: oklch(72% 0.16 ${h})`}
+            />
+          ))
+        }
+      </div>
+    </div>
+
+    <!-- Heading font -->
+    <div>
+      <label class={labelClass} for="cz-heading-font">Heading Font</label>
+      <select id="cz-heading-font" data-cz-heading-font class={`mt-2 ${selectClass}`}>
+        {headingFonts.map((f) => <option value={f.stack}>{f.label}</option>)}
+      </select>
+    </div>
+
+    <!-- Body font -->
+    <div>
+      <label class={labelClass} for="cz-body-font">Body Font</label>
+      <select id="cz-body-font" data-cz-body-font class={`mt-2 ${selectClass}`}>
+        {bodyFonts.map((f) => <option value={f.stack}>{f.label}</option>)}
+      </select>
+    </div>
+
+    <!-- Heading style -->
+    <div>
+      <label class={labelClass} for="cz-heading-weight">Heading Style</label>
+      <div class="mt-2 flex items-center gap-2">
+        <select id="cz-heading-weight" data-cz-heading-weight class={selectClass}>
+          {headingWeights.map((w) => <option value={w.value} selected={w.value === "800"}>{w.label}</option>)}
+        </select>
+        <button type="button" data-cz-heading-case data-active="false" aria-label="Toggle heading uppercase" title="Uppercase" class="grid h-[42px] w-[42px] shrink-0 place-items-center rounded-control border border-line text-base text-ink-muted transition hover:text-ink data-[active=true]:border-brand-500 data-[active=true]:text-brand-600" style="font-family: var(--font-display);">AA</button>
+      </div>
+    </div>
+
+    <!-- Button style -->
+    <div>
+      <label class={labelClass} for="cz-btn-weight">Button Style</label>
+      <div class="mt-2 flex items-center gap-2">
+        <select id="cz-btn-weight" data-cz-btn-weight class={selectClass}>
+          {buttonWeights.map((w) => <option value={w.value} selected={w.value === "600"}>{w.label}</option>)}
+        </select>
+        <button type="button" data-cz-btn-case data-active="false" aria-label="Toggle button uppercase" title="Uppercase" class="grid h-[42px] w-[42px] shrink-0 place-items-center rounded-control border border-line text-base text-ink-muted transition hover:text-ink data-[active=true]:border-brand-500 data-[active=true]:text-brand-600" style="font-weight: var(--btn-weight);">AA</button>
+      </div>
+    </div>
+
+    <!-- Border radius -->
+    <div>
+      <p class={labelClass}>Border Radius</p>
+      <div class="mt-2 grid grid-cols-6 gap-1.5">
+        {
+          radii.map((r) => (
+            <button
+              type="button"
+              data-cz-radius={r}
+              data-active="false"
+              class="rounded-lg border border-line px-1 py-2 text-xs font-medium text-ink-muted transition hover:text-ink data-[active=true]:border-brand-500 data-[active=true]:text-brand-600"
+            >
+              {r === "0" ? "0" : r.replace("px", "")}
+            </button>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="border-t border-line px-5 py-4">
+    <p class="text-xs leading-relaxed text-ink-muted">
+      Preview only. Run <code class="rounded bg-surface-2 px-1 py-0.5 text-brand-600">/brand-setup</code> to apply permanently.
+    </p>
+    <button type="button" data-cz-reset class="mt-3 text-sm text-ink-muted underline underline-offset-4 transition-colors hover:text-ink">
+      Reset to defaults
+    </button>
+  </div>
+</div>
+
+<style>
+  [data-cz-hue]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    height: 18px;
+    width: 18px;
+    border-radius: 9999px;
+    background: #fff;
+    border: 2px solid rgba(0, 0, 0, 0.25);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.35);
+    cursor: pointer;
+  }
+  [data-cz-hue]::-moz-range-thumb {
+    height: 18px;
+    width: 18px;
+    border-radius: 9999px;
+    background: #fff;
+    border: 2px solid rgba(0, 0, 0, 0.25);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.35);
+    cursor: pointer;
+  }
+</style>
+
+<script>
+  const root = document.documentElement;
+  const panel = document.querySelector<HTMLElement>("[data-cz-panel]");
+  const fab = document.querySelector<HTMLElement>("[data-cz-fab]");
+  if (panel && fab) {
+    const KEY = "ttb-customizer";
+    const THEME_KEY = "ttb-theme";
+    const DEFAULT_THEME = root.getAttribute("data-default-theme") || "light";
+    const VARS = [
+      "--brand-hue",
+      "--brand-chroma",
+      "--font-display",
+      "--font-sans",
+      "--heading-weight",
+      "--btn-weight",
+      "--heading-transform",
+      "--btn-transform",
+      "--radius-control",
+      "--radius-card",
+    ];
+    const THEME_PRESET_KEY = "ttb-theme-preset";
+    const DEFAULT_THEME_PRESET = root.getAttribute("data-default-theme-preset") || "default";
+
+    const q = <T extends Element>(sel: string) => panel.querySelector<T>(sel);
+    const load = (): Record<string, string> => {
+      try {
+        return JSON.parse(localStorage.getItem(KEY) || "{}");
+      } catch (e) {
+        return {};
+      }
+    };
+    let state = load();
+    const save = () => {
+      try {
+        localStorage.setItem(KEY, JSON.stringify(state));
+      } catch (e) {}
+    };
+    const setVar = (k: string, v: string) => {
+      root.style.setProperty(k, v);
+      state[k] = v;
+      save();
+    };
+
+    // --- open / close ---
+    const setOpen = (open: boolean) => {
+      panel.classList.toggle("opacity-0", !open);
+      panel.classList.toggle("translate-y-2", !open);
+      panel.classList.toggle("pointer-events-none", !open);
+      fab.classList.toggle("hidden", open);
+    };
+    document.querySelector("[data-cz-open]")?.addEventListener("click", () => setOpen(true));
+    q<HTMLElement>("[data-cz-close]")?.addEventListener("click", () => setOpen(false));
+
+    // --- dark mode ---
+    const dark = q<HTMLElement>("[data-cz-dark]");
+    const syncDark = () => {
+      const on = root.dataset.theme === "dark";
+      dark?.setAttribute("data-on", String(on));
+      dark?.setAttribute("aria-checked", String(on));
+    };
+    dark?.addEventListener("click", () => {
+      const next = root.dataset.theme === "dark" ? "light" : "dark";
+      root.dataset.theme = next;
+      try {
+        localStorage.setItem(THEME_KEY, next);
+      } catch (e) {}
+      syncDark();
+    });
+
+    // --- brand hue ---
+    const hue = q<HTMLInputElement>("[data-cz-hue]");
+    hue?.addEventListener("input", () => {
+      setVar("--brand-hue", hue.value);
+      setVar("--brand-chroma", "1");
+    });
+    panel.querySelectorAll<HTMLElement>("[data-cz-swatch]").forEach((s) =>
+      s.addEventListener("click", () => {
+        const h = s.getAttribute("data-cz-swatch") || "185";
+        if (hue) hue.value = h;
+        setVar("--brand-hue", h);
+        setVar("--brand-chroma", "1");
+        syncSwatches();
+      })
+    );
+    const syncSwatches = () => {
+      const cur = state["--brand-hue"] || "";
+      panel.querySelectorAll<HTMLElement>("[data-cz-swatch]").forEach((s) =>
+        s.setAttribute("data-active", String(s.getAttribute("data-cz-swatch") === cur))
+      );
+    };
+
+    // --- fonts + weights ---
+    const hf = q<HTMLSelectElement>("[data-cz-heading-font]");
+    hf?.addEventListener("change", () => setVar("--font-display", hf.value));
+    const bf = q<HTMLSelectElement>("[data-cz-body-font]");
+    bf?.addEventListener("change", () => setVar("--font-sans", bf.value));
+    const hw = q<HTMLSelectElement>("[data-cz-heading-weight]");
+    hw?.addEventListener("change", () => setVar("--heading-weight", hw.value));
+    const bw = q<HTMLSelectElement>("[data-cz-btn-weight]");
+    bw?.addEventListener("change", () => setVar("--btn-weight", bw.value));
+
+    // --- uppercase toggles (the AA buttons) ---
+    const headingCase = q<HTMLElement>("[data-cz-heading-case]");
+    headingCase?.addEventListener("click", () => {
+      const next = state["--heading-transform"] === "uppercase" ? "none" : "uppercase";
+      setVar("--heading-transform", next);
+      syncCase();
+    });
+    const btnCase = q<HTMLElement>("[data-cz-btn-case]");
+    btnCase?.addEventListener("click", () => {
+      const next = state["--btn-transform"] === "uppercase" ? "none" : "uppercase";
+      setVar("--btn-transform", next);
+      syncCase();
+    });
+    const syncCase = () => {
+      headingCase?.setAttribute("data-active", String(state["--heading-transform"] === "uppercase"));
+      btnCase?.setAttribute("data-active", String(state["--btn-transform"] === "uppercase"));
+    };
+
+    // --- radius ---
+    // Radius declared by the active full theme (e.g. brutalist = 0), used as
+    // the fallback for the indicator when the user hasn't set one manually.
+    let currentThemeRadius: string | null = null;
+    const radiusBtns = panel.querySelectorAll<HTMLElement>("[data-cz-radius]");
+    const syncRadius = () => {
+      const cur = state["--radius-control"] || currentThemeRadius || "8px";
+      radiusBtns.forEach((b) =>
+        b.setAttribute("data-active", String(b.getAttribute("data-cz-radius") === cur))
+      );
+    };
+    radiusBtns.forEach((b) =>
+      b.addEventListener("click", () => {
+        const r = b.getAttribute("data-cz-radius") || "8px";
+        setVar("--radius-control", r);
+        setVar("--radius-card", r);
+        syncRadius();
+      })
+    );
+
+    // --- full theme ---
+    // A full theme owns its whole palette, so Brand Color is locked while one
+    // is active (any non-default theme).
+    const brandColor = q<HTMLElement>("[data-cz-brandcolor]");
+    const brandHint = q<HTMLElement>("[data-cz-brandcolor-hint]");
+    const swatchBtns = panel.querySelectorAll<HTMLButtonElement>("[data-cz-swatch]");
+    const setBrandColorEnabled = (enabled: boolean) => {
+      brandColor?.classList.toggle("opacity-40", !enabled);
+      brandColor?.classList.toggle("pointer-events-none", !enabled);
+      brandHint?.classList.toggle("hidden", enabled);
+      if (hue) hue.disabled = !enabled;
+      swatchBtns.forEach((s) => (s.disabled = !enabled));
+    };
+
+    const themeBtns = panel.querySelectorAll<HTMLElement>("[data-cz-theme]");
+    const syncTheme = () => {
+      const cur = root.dataset.themePreset || "default";
+      let themeRadius: string | null = null;
+      themeBtns.forEach((b) => {
+        const active = b.getAttribute("data-cz-theme") === cur;
+        b.setAttribute("data-active", String(active));
+        if (active) themeRadius = b.getAttribute("data-cz-theme-radius");
+      });
+      currentThemeRadius = themeRadius;
+      setBrandColorEnabled(cur === "default");
+      syncRadius();
+    };
+    themeBtns.forEach((b) =>
+      b.addEventListener("click", () => {
+        const id = b.getAttribute("data-cz-theme") || "default";
+        root.dataset.themePreset = id;
+        // Drop any manual hue override so the theme's own accent shows.
+        if (id !== "default") {
+          ["--brand-hue", "--brand-chroma"].forEach((k) => {
+            root.style.removeProperty(k);
+            delete state[k];
+          });
+        }
+        // If the theme declares its own radius (e.g. brutalist = 0), drop
+        // any manual radius override so the theme's corners win.
+        if (b.getAttribute("data-cz-theme-radius")) {
+          ["--radius-control", "--radius-card"].forEach((k) => {
+            root.style.removeProperty(k);
+            delete state[k];
+          });
+        }
+        save();
+        try {
+          localStorage.setItem(THEME_PRESET_KEY, id);
+        } catch (e) {}
+        syncTheme();
+      })
+    );
+
+    // --- reset ---
+    q<HTMLElement>("[data-cz-reset]")?.addEventListener("click", () => {
+      VARS.forEach((k) => root.style.removeProperty(k));
+      state = {};
+      try {
+        localStorage.removeItem(KEY);
+        localStorage.removeItem(THEME_KEY);
+        localStorage.removeItem(THEME_PRESET_KEY);
+      } catch (e) {}
+      root.dataset.theme = DEFAULT_THEME;
+      root.dataset.themePreset = DEFAULT_THEME_PRESET;
+      syncControls();
+    });
+
+    // --- sync UI to saved state ---
+    function syncControls() {
+      if (hue) hue.value = state["--brand-hue"] || "185";
+      if (hf && state["--font-display"]) hf.value = state["--font-display"];
+      if (bf && state["--font-sans"]) bf.value = state["--font-sans"];
+      if (hw) hw.value = state["--heading-weight"] || "800";
+      if (bw) bw.value = state["--btn-weight"] || "600";
+      syncDark();
+      syncSwatches();
+      syncRadius();
+      syncCase();
+      syncTheme();
+    }
+    syncControls();
+  }
+</script>

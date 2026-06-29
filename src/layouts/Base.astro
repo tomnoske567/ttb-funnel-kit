@@ -1,0 +1,56 @@
+---
+import "../styles/global.css";
+import { site } from "../config";
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const { title = site.name, description = site.description } = Astro.props;
+const fullTitle = title === site.name ? title : `${title} | ${site.name}`;
+---
+
+<!doctype html>
+<html
+  lang="en"
+  data-theme={site.theme}
+  data-preset={site.preset}
+  data-theme-preset={site.themePreset}
+  data-default-theme={site.theme}
+  data-default-theme-preset={site.themePreset}
+>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    {/* Apply a saved theme/preset/customiser choice before paint to avoid a flash. */}
+    <script is:inline>
+      (function () {
+        try {
+          var root = document.documentElement;
+          var t = localStorage.getItem("ttb-theme");
+          if (t === "light" || t === "dark") root.dataset.theme = t;
+          var p = localStorage.getItem("ttb-preset");
+          if (p) root.dataset.preset = p;
+          var tp = localStorage.getItem("ttb-theme-preset");
+          if (tp) root.dataset.themePreset = tp;
+          var c = localStorage.getItem("ttb-customizer");
+          if (c) {
+            var vars = JSON.parse(c);
+            for (var k in vars) root.style.setProperty(k, vars[k]);
+          }
+        } catch (e) {}
+      })();
+    </script>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta name="generator" content={Astro.generator} />
+  </head>
+  <body class="min-h-[100dvh] bg-surface text-ink">
+    <slot />
+  </body>
+</html>

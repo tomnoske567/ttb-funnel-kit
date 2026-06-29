@@ -1,0 +1,415 @@
+@import "tailwindcss";
+@import "@fontsource-variable/inter";
+@import "@fontsource-variable/outfit";
+
+/* ============================================================
+   Time to Build Funnel Kit - Design tokens
+
+   THREE student-controlled colours (set by /brand-setup):
+     1. Brand / feature colour  -> --brand-* (whole scale from --brand-hue)
+     2. Light surface           -> --color-surface / --color-ink
+     3. Dark surface            -> --color-surface-dark / --color-ink-dark
+
+   Shape rule (documented, applied everywhere):
+     buttons + inputs = rounded-lg | cards + images = rounded-2xl | pills + dots = rounded-full
+   ============================================================ */
+
+@theme {
+  --font-sans: "Inter Variable", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  /* Headlines use a display font with more character than the body. */
+  --font-display: "Outfit Variable", "Outfit", var(--font-sans);
+
+  /* 1. Brand accent. The whole 10-step scale derives from ONE hue plus a
+        saturation multiplier, so a theme preset only sets these two values.
+        amber 75 · orange 55 · teal 185 · emerald 162 · sage 155 · blue 264 · violet 295 */
+  --brand-hue: 185;
+  --brand-chroma: 1; /* saturation multiplier (1 = vivid, ~0.3 = muted) */
+  --color-brand-50:  oklch(97% calc(0.03 * var(--brand-chroma)) var(--brand-hue));
+  --color-brand-100: oklch(94% calc(0.06 * var(--brand-chroma)) var(--brand-hue));
+  --color-brand-200: oklch(90% calc(0.10 * var(--brand-chroma)) var(--brand-hue));
+  --color-brand-300: oklch(84% calc(0.13 * var(--brand-chroma)) var(--brand-hue));
+  --color-brand-400: oklch(78% calc(0.15 * var(--brand-chroma)) var(--brand-hue));
+  --color-brand-500: oklch(72% calc(0.16 * var(--brand-chroma)) var(--brand-hue));
+  --color-brand-600: oklch(62% calc(0.14 * var(--brand-chroma)) var(--brand-hue));
+  --color-brand-700: oklch(52% calc(0.12 * var(--brand-chroma)) var(--brand-hue));
+  --color-brand-800: oklch(42% calc(0.09 * var(--brand-chroma)) var(--brand-hue));
+  --color-brand-900: oklch(32% calc(0.06 * var(--brand-chroma)) var(--brand-hue));
+  --color-brand: var(--color-brand-500);
+  --color-brand-ink: oklch(100% 0 0); /* text on brand fills - white by default; themes can override */
+
+  /* Soft "chip" accent for small badges / pills / icon circles. Flips in
+     dark mode (see below) to a dark tint + light text, instead of a bright
+     fill that screams on a dark page. */
+  --color-chip:     var(--color-brand-100);
+  --color-chip-ink: var(--color-brand-800);
+
+  /* Optional secondary accent for the secondary CTA button. Transparent by
+     default (so the button is a plain outline); a theme can set a colour to
+     turn it into a filled secondary button. */
+  --color-secondary:     transparent;
+  --color-secondary-ink: var(--color-ink);
+
+  /* 2. Neutral surfaces - kept genuinely neutral (no hue) so any brand
+        accent reads clean on top, the way premium themes do it. */
+  --color-surface:   oklch(100% 0 0);  /* crisp white page background */
+  --color-surface-2: oklch(97% 0 0);   /* subtle panel */
+  --color-card:      oklch(100% 0 0);
+  --color-ink:       oklch(24% 0 0);   /* near-black text */
+  --color-ink-muted: oklch(50% 0 0);   /* secondary text */
+  --color-line:      oklch(91% 0 0);   /* borders */
+
+  /* 3. Dark contrast band (dark sections within light mode) */
+  --color-surface-dark: oklch(22% 0 0);
+  --color-ink-dark:     oklch(96% 0 0);
+
+  /* Control corner radius - buttons AND inputs share this one token.
+     Change this single value to reshape every button/input on the site:
+       Square:  0
+       Curved:  0.5rem  (default)
+       Pill:    9999px
+     Generates the `rounded-control` utility. */
+  --radius-control: 0.5rem;
+
+  /* Card + image corner radius (the radius control drives this too).
+     Generates the `rounded-card` utility. */
+  --radius-card: 1rem;
+
+  /* Type weights + case (the Customise Theme panel / brand-setup drive these). */
+  --heading-weight: 800; /* h1-h3 */
+  --btn-weight: 600; /* buttons */
+  --heading-transform: none; /* none | uppercase */
+  --btn-transform: none; /* none | uppercase */
+}
+
+html {
+  scroll-behavior: smooth;
+  /* Keeps anchor-link targets clear of the sticky header */
+  scroll-padding-top: 5rem;
+  color-scheme: light;
+}
+
+/* ============================================================
+   Dark mode. Set `theme: "dark"` in config.ts to ship a dark
+   site, or drop in <ThemeToggle /> to let visitors switch.
+   Everything is built on the semantic tokens below, so flipping
+   these variables re-themes the whole kit - no markup changes.
+
+   The brand scale (--brand-*) is intentionally NOT flipped: your
+   accent colour stays the same in both modes.
+   ============================================================ */
+[data-theme="dark"] {
+  color-scheme: dark;
+
+  /* Neutral charcoal ramp - the brand shows through the accents, NOT the
+     surfaces. That's how premium dark themes (Linear, Vercel, the shadcn
+     themes) stay clean instead of muddy. Tinting the charcoal toward the
+     brand is what made this read brown, so the surfaces are kept neutral
+     and the elevation steps are spaced so panels read as layered.
+
+       page  0.16  ->  panel 0.20  ->  card 0.22  ->  band 0.26
+       border 0.30 sits a clear step above the cards so edges catch light.
+       text is a soft off-white (0.96), not a harsh pure white. */
+  --color-surface:   oklch(0.16 0 0);  /* page background */
+  --color-surface-2: oklch(0.20 0 0);  /* subtle panel */
+  --color-card:      oklch(0.22 0 0);  /* elevated card */
+  --color-ink:       oklch(0.96 0 0);  /* primary text */
+  --color-ink-muted: oklch(0.70 0 0);  /* secondary text */
+  --color-line:      oklch(0.30 0 0);  /* borders */
+
+  /* Premium contrast bands (checkout, proof strip, final CTA) sit just
+     above the cards so they still read as elevated panels. */
+  --color-surface-dark: oklch(0.26 0 0);
+  --color-ink-dark:     oklch(0.97 0 0);
+
+  /* Chips flip: a soft dark tint of the accent + light accent text,
+     instead of a bright fill. */
+  --color-chip:     color-mix(in oklch, var(--color-brand-500) 22%, transparent);
+  --color-chip-ink: var(--color-brand-200);
+}
+
+/* ============================================================
+   Theme presets - a one-word, premium palette swap. Set `preset`
+   in config.ts to ship one, or preview them all with <ThemePresets/>
+   on /showcase. Each preset only changes the ACCENT (hue + saturation);
+   the neutral surfaces stay shared, so every preset looks clean and
+   works in both light and dark mode automatically.
+   ============================================================ */
+[data-preset="teal"]   { --brand-hue: 185; --brand-chroma: 1; }
+[data-preset="blue"]   { --brand-hue: 264; --brand-chroma: 1.05; }
+[data-preset="violet"] { --brand-hue: 295; --brand-chroma: 1; }
+[data-preset="orange"] { --brand-hue: 55;  --brand-chroma: 0.92; }
+[data-preset="sage"]   { --brand-hue: 155; --brand-chroma: 0.34; }
+
+/* ============================================================
+   FULL THEMES - a complete palette swap (surfaces + text + borders
+   + accent), light AND dark. Selected via the Customise Theme panel
+   (data-theme-preset on <html>) or `themePreset` in config.ts.
+
+   Each theme = one light block + one dark block. The dark block uses
+   the [data-theme="dark"][data-theme-preset="x"] selector so it always
+   wins over the global dark ramp. "default" needs no block (it IS the
+   @theme baseline). Add new themes by pasting a pair of blocks below.
+   ============================================================ */
+
+/* --- Sage --- warm paper, muted sage-green accent, navy ink */
+[data-theme-preset="sage"] {
+  --brand-hue: 152;
+  --brand-chroma: 0.22;          /* muted, for derived tints */
+  --color-brand-500: #7c9082;    /* the muted sage primary (exact) */
+  --color-brand-600: #677a6c;    /* deeper sage for labels */
+  --color-brand-400: #a8b59a;    /* lighter sage on the dark bands */
+  --color-brand-ink: #ffffff;    /* white on sage (light) */
+  --color-secondary: #ced4bf;    /* pale sage secondary */
+  --color-secondary-ink: #1a1f2e;
+  --radius-control: 4px;         /* tighter corners than default */
+  --radius-card: 4px;
+  --color-surface:      #f8f7f4; /* warm paper */
+  --color-surface-2:    #e8e6e1;
+  --color-card:         #ffffff;
+  --color-ink:          #1a1f2e; /* dark navy/slate */
+  --color-ink-muted:    #6b7280;
+  --color-line:         #e8e6e1;
+  --color-surface-dark: #1a1f2e; /* navy bands */
+  --color-ink-dark:     #f5f5f5;
+}
+[data-theme="dark"][data-theme-preset="sage"] {
+  --color-brand-ink: #000000;    /* black on sage (dark) */
+  --color-secondary: #1a1a1a;
+  --color-secondary-ink: #f5f5f5;
+  --color-surface:      #0a0a0a;
+  --color-surface-2:    #1a1a1a;
+  --color-card:         #121212;
+  --color-ink:          #f5f5f5;
+  --color-ink-muted:    #a0a0a0;
+  --color-line:         #2a2a2a;
+  --color-surface-dark: #36443a; /* dark-green elevated band */
+  --color-ink-dark:     #f5f5f5;
+}
+
+/* --- Nature --- */
+[data-theme-preset="nature"] {
+  --brand-hue: 146;          /* forest green, from the primary */
+  --brand-chroma: 1.03;
+  --color-brand-ink: #ffffff; /* white on green buttons (light mode) */
+  --color-secondary: #e8f5e9;     /* pale mint secondary */
+  --color-secondary-ink: #1b5e20;
+  --color-surface:      #f8f5f0; /* warm cream */
+  --color-surface-2:    #f0e9e0;
+  --color-card:         #f8f5f0; /* card == bg; defined by its border */
+  --color-ink:          #3e2723; /* dark brown */
+  --color-ink-muted:    #6d4c41;
+  --color-line:         #e0d6c9; /* tan */
+  --color-surface-dark: #1c2a1f; /* deep-forest bands tie back to dark mode */
+  --color-ink-dark:     #f0ebe5;
+}
+[data-theme="dark"][data-theme-preset="nature"] {
+  --color-surface:      #1c2a1f; /* deep forest */
+  --color-surface-2:    #252f26;
+  --color-card:         #2d3a2e;
+  --color-ink:          #f0ebe5;
+  --color-ink-muted:    #d7cfc4;
+  --color-line:         #3e4a3d;
+  --color-surface-dark: #36443a; /* elevated band - kept off the stroke colour */
+  --color-ink-dark:     #f0ebe5;
+  --color-brand-ink:    #0a1f0c; /* dark text on the brighter green buttons */
+  --color-secondary: #3e4a3d;    /* muted green secondary */
+  --color-secondary-ink: #d7e0d6;
+}
+
+/* --- Brutalist --- sharp corners, hard black/white borders, red accent */
+[data-theme-preset="brutalist"] {
+  --brand-hue: 25;            /* red */
+  --brand-chroma: 1.2;
+  --color-brand-ink: #ffffff; /* white on red buttons (light) */
+  --radius-control: 0px;      /* brutalism = no radius */
+  --radius-card: 0px;
+  --brutal-border: 3px;       /* chunky borders */
+  --brutal-shadow: 4px 4px 0 0; /* hard offset shadow (no blur) */
+  --brutal-shadow-color: #000;  /* black on light cards (overridden on dark cards + dark mode) */
+  --color-surface:      #ffffff;
+  --color-surface-2:    #f0f0f0;
+  --color-card:         #ffffff;
+  --color-ink:          #000000;
+  --color-ink-muted:    #333333;
+  --color-line:         #000000; /* heavy black borders */
+  --color-surface-dark: #000000;
+  --color-ink-dark:     #ffffff;
+}
+[data-theme="dark"][data-theme-preset="brutalist"] {
+  --color-surface:      #000000;
+  --color-surface-2:    #1a1a1a;
+  --color-card:         #333333;
+  --color-ink:          #ffffff;
+  --color-ink-muted:    #cccccc;
+  --color-line:         #ffffff; /* white borders on black */
+  --color-surface-dark: #333333;
+  --color-ink-dark:     #ffffff;
+  --color-brand-ink:    #000000; /* black text on the coral buttons */
+  /* On the near-black page a black shadow vanishes and a white one glows, so
+     the whole dark mode uses an accent-red hard shadow instead. */
+  --brutal-shadow-color: var(--color-brand-500);
+}
+/* Neo-brutalist surfaces: chunky borders + hard offset shadow on cards and
+   buttons (not the customiser panel). */
+[data-theme-preset="brutalist"]
+  :is(.rounded-card, .rounded-control):not([data-cz-panel] *) {
+  border: var(--brutal-border) solid var(--color-line);
+  box-shadow: var(--brutal-shadow) var(--brutal-shadow-color);
+}
+/* All-black cards: a black shadow merges into them, so theirs is accent-red. */
+[data-theme-preset="brutalist"]
+  .rounded-card.bg-surface-dark:not([data-cz-panel] *) {
+  box-shadow: var(--brutal-shadow) var(--color-brand-500);
+}
+
+/* --- Linen --- warm editorial neutrals; the accent is monochrome (charcoal
+   in light, bone in dark), so the brand steps are set directly here rather
+   than derived from a hue. */
+[data-theme-preset="linen"] {
+  --brand-hue: 80;
+  --brand-chroma: 0.18;          /* faint warm tint for chips only */
+  --color-brand-500: #2e2e2e;    /* charcoal accent (buttons, checks, stars) */
+  --color-brand-600: #44403a;    /* eyebrow / section labels */
+  --color-brand-400: #e6e4d7;    /* light accent on the dark bands */
+  --color-brand-ink: #e6e4d7;    /* linen text on charcoal buttons */
+  --color-secondary: #d8d2c4;    /* tan secondary */
+  --color-secondary-ink: #2e2e2e;
+  --color-surface:      #e9e4d8; /* linen */
+  --color-surface-2:    #d8d2c4;
+  --color-card:         #f4efe4; /* lighter cream */
+  --color-ink:          #1e1e1e;
+  --color-ink-muted:    #5e5a52;
+  --color-line:         #d2cbbb; /* tan */
+  --color-surface-dark: #2e2e2e; /* charcoal bands */
+  --color-ink-dark:     #e6e4d7;
+}
+[data-theme="dark"][data-theme-preset="linen"] {
+  --color-brand-500: #d1cfc0;    /* bone accent */
+  --color-brand-600: #c9c6b8;
+  --color-brand-400: #d1cfc0;
+  --color-brand-ink: #363636;    /* dark text on bone buttons */
+  --color-secondary: #222222;    /* dark neutral secondary */
+  --color-secondary-ink: #d1cfc0;
+  --color-surface:      #141414;
+  --color-surface-2:    #222222;
+  --color-card:         #1c1c1c;
+  --color-ink:          #e8e3da;
+  --color-ink-muted:    #8e8a83;
+  --color-line:         #2c2c2c;
+  --color-surface-dark: #363636; /* elevated band - kept off the stroke colour */
+  --color-ink-dark:     #e8e3da;
+}
+
+/* --- Amber --- warm terracotta accent on cool neutrals, 12px radius */
+[data-theme-preset="amber"] {
+  --brand-hue: 55;               /* amber / terracotta */
+  --brand-chroma: 0.9;
+  --color-brand-ink: #ffffff;    /* white on amber (light) */
+  --color-secondary: #527575;    /* cool teal secondary - the warm/cool pairing */
+  --color-secondary-ink: #ffffff;
+  --radius-control: 0.75rem;     /* 12px - medium round */
+  --radius-card: 0.75rem;
+  --color-surface:      #ffffff;
+  --color-surface-2:    #f3f4f6;
+  --color-card:         #ffffff;
+  --color-ink:          #111827; /* slate */
+  --color-ink-muted:    #6b7280;
+  --color-line:         #e5e7eb;
+  --color-surface-dark: #121212; /* near-black bands */
+  --color-ink-dark:     #f5f5f5;
+}
+[data-theme="dark"][data-theme-preset="amber"] {
+  --color-brand-ink: #121113;    /* dark text on amber (dark) */
+  --color-secondary: #5f8787;    /* teal secondary (dark) */
+  --color-secondary-ink: #121113;
+  --color-surface:      #121113;
+  --color-surface-2:    #1a1a1a; /* was #222222 - kept off the stroke colour */
+  --color-card:         #121212;
+  --color-ink:          #c1c1c1; /* soft grey text */
+  --color-ink-muted:    #888888;
+  --color-line:         #2a2a2a; /* lifted off #222222 so strokes/dividers read */
+  --color-surface-dark: #333333; /* elevated band */
+  --color-ink-dark:     #e8e8e8;
+}
+
+/* --- Retro --- Solarized: magenta primary, teal secondary, cream/dark-teal */
+[data-theme-preset="retro"] {
+  --brand-hue: 358;
+  --brand-chroma: 1.25;
+  --color-brand-500: #d33682;    /* magenta primary (exact) */
+  --color-brand-600: #c1306f;    /* deeper magenta for labels */
+  --color-brand-400: #e85a9d;    /* lighter magenta on the dark bands */
+  --color-brand-ink: #ffffff;
+  --color-secondary: #2aa198;    /* teal secondary */
+  --color-secondary-ink: #ffffff;
+  --radius-control: 4px;
+  --radius-card: 4px;
+  --color-surface:      #fdf6e3; /* base3 cream */
+  --color-surface-2:    #eee8d5; /* base2 */
+  --color-card:         #eee8d5;
+  --color-ink:          #073642; /* base02 dark teal */
+  --color-ink-muted:    #657b83; /* base00 - lifted off the ink for hierarchy */
+  --color-line:         #839496; /* base0 grey */
+  --color-surface-dark: #073642; /* dark-teal bands */
+  --color-ink-dark:     #fdf6e3;
+}
+[data-theme="dark"][data-theme-preset="retro"] {
+  --color-surface:      #002b36; /* base03 */
+  --color-surface-2:    #073642; /* base02 */
+  --color-card:         #073642;
+  --color-ink:          #93a1a1; /* base1 */
+  --color-ink-muted:    #839496; /* base0 - lifted off the ink */
+  --color-line:         #586e75; /* base01 */
+  --color-surface-dark: #0d4a5a; /* lifted teal band, off the stroke colour */
+  --color-ink-dark:     #eee8d5;
+}
+
+/* --- Ocean --- clean blue accent on neutral greys */
+[data-theme-preset="ocean"] {
+  --brand-hue: 243;
+  --brand-chroma: 0.84;
+  --color-brand-500: oklch(0.5 0.134 242.749); /* medium blue (exact) */
+  --color-brand-ink: #ffffff;
+  --color-secondary: oklch(0.92 0.004 286.32); /* soft grey secondary */
+  --color-secondary-ink: oklch(0.21 0.006 56);
+  --radius-control: 0.625rem;    /* 10px */
+  --radius-card: 0.625rem;
+  --color-surface:      #ffffff;
+  --color-surface-2:    oklch(0.97 0 0);
+  --color-card:         #fcfcfc;
+  --color-ink:          oklch(0.147 0.004 49.25);
+  --color-ink-muted:    oklch(0.45 0.006 286); /* lifted off near-ink source for hierarchy */
+  --color-line:         oklch(0.87 0 0);
+  --color-surface-dark: oklch(0.205 0 0);
+  --color-ink-dark:     oklch(0.97 0 0);
+}
+[data-theme="dark"][data-theme-preset="ocean"] {
+  --color-brand-500: oklch(0.391 0.09 240.876); /* deep blue (exact) */
+  --color-brand-ink: #ffffff;
+  --color-secondary: oklch(0.274 0.006 286.033);
+  --color-secondary-ink: oklch(0.923 0.003 48.717);
+  --color-surface:      oklch(0.205 0 0);
+  --color-surface-2:    oklch(0.269 0 0);
+  --color-card:         oklch(0.2264 0 0);
+  --color-ink:          oklch(0.923 0.003 48.717);
+  --color-ink-muted:    oklch(0.708 0 0);
+  --color-line:         oklch(0.32 0 0);   /* lifted off muted (0.269) so strokes read */
+  --color-surface-dark: oklch(0.36 0 0);
+  --color-ink-dark:     oklch(0.97 0 0);
+}
+
+body {
+  background-color: var(--color-surface);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+  font-weight: var(--heading-weight);
+  text-transform: var(--heading-transform);
+}

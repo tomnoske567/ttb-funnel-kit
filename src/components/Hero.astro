@@ -1,0 +1,119 @@
+---
+import HeroCopy from "./HeroCopy.astro";
+
+// Hero with a `mode` switch. All three layouts share the same HeroCopy block.
+//   split — copy left, media right (default)
+//   vsl   — centered copy with a video player
+//   text  — copy only, centered, no media
+interface Props {
+  mode?: "split" | "vsl" | "text";
+  eyebrow?: string;
+  headline: string;
+  subheadline?: string;
+  bullets?: string[];
+  ctaLabel: string;
+  ctaHref?: string;
+  secondaryLabel?: string;
+  secondaryHref?: string;
+  trustLabel?: string;
+  /** split: right-hand image · vsl: video poster */
+  image?: string;
+  imageAlt?: string;
+  /** vsl: where the play button links (your video URL) */
+  videoUrl?: string;
+}
+
+const {
+  mode = "split",
+  eyebrow,
+  headline,
+  subheadline,
+  bullets = [],
+  ctaLabel,
+  ctaHref,
+  secondaryLabel,
+  secondaryHref,
+  trustLabel,
+  image,
+  imageAlt = "",
+  videoUrl,
+} = Astro.props;
+
+// Shared content passed to HeroCopy in every mode.
+const copy = {
+  eyebrow,
+  headline,
+  subheadline,
+  ctaLabel,
+  ctaHref,
+  secondaryLabel,
+  secondaryHref,
+  trustLabel,
+};
+---
+
+{
+  mode === "split" && (
+    <section class="mx-auto max-w-6xl px-6 pb-16 pt-12 lg:pt-16">
+      <div class="grid items-center gap-10 lg:grid-cols-2 lg:gap-14">
+        <HeroCopy align="left" {...copy} bullets={bullets} />
+        <div class="hidden lg:block lg:pl-4">
+          <div class="overflow-hidden rounded-card border border-line bg-surface-2 shadow-xl shadow-black/5">
+            <img
+              src={image ?? "https://picsum.photos/seed/ttb-offer-hero/1100/900"}
+              alt={imageAlt}
+              width="1100"
+              height="900"
+              class="h-auto w-full"
+              loading="eager"
+            />
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+{
+  mode === "text" && (
+    <section class="mx-auto max-w-3xl px-6 pb-16 pt-16 lg:pt-24">
+      <HeroCopy align="center" {...copy} bullets={bullets} />
+    </section>
+  )
+}
+
+{
+  mode === "vsl" && (
+    <section class="mx-auto max-w-3xl px-6 pb-16 pt-14 lg:pt-20">
+      <HeroCopy align="center" {...copy}>
+        <a
+          slot="media"
+          href={videoUrl ?? "#"}
+          aria-label="Play video"
+          class="group relative block aspect-video w-full overflow-hidden rounded-card border border-line bg-surface-2 shadow-xl shadow-black/5"
+        >
+          <img
+            src={image ?? "https://picsum.photos/seed/ttb-vsl/1280/720"}
+            alt={imageAlt}
+            width="1280"
+            height="720"
+            class="h-full w-full object-cover"
+            loading="eager"
+          />
+          <span class="absolute inset-0 grid place-items-center bg-black/20 transition-colors group-hover:bg-black/30">
+            <span class="flex h-16 w-16 items-center justify-center rounded-full bg-white/90 shadow-lg backdrop-blur transition-transform group-hover:scale-105">
+              <svg
+                class="ml-1 h-6 w-6 text-ink"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                aria-hidden="true"
+              >
+                <path d="M8 5v14l11-7z" />
+              </svg>
+            </span>
+          </span>
+        </a>
+      </HeroCopy>
+    </section>
+  )
+}

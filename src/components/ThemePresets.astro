@@ -1,0 +1,57 @@
+---
+// Palette-preset swatch picker. Sets data-preset on <html> and remembers it.
+// Use it to preview the built-in presets; for a single-palette site, just set
+// `preset` in config.ts and leave this out.
+const presets = [
+  { id: "teal", label: "Teal", hue: 185, chroma: 1 },
+  { id: "blue", label: "Blue", hue: 264, chroma: 1.05 },
+  { id: "violet", label: "Violet", hue: 295, chroma: 1 },
+  { id: "orange", label: "Orange", hue: 55, chroma: 0.92 },
+  { id: "sage", label: "Sage", hue: 155, chroma: 0.34 },
+];
+const swatch = (hue: number, chroma: number) =>
+  `oklch(72% ${(0.16 * chroma).toFixed(3)} ${hue})`;
+---
+
+<div class="flex items-center gap-2" role="group" aria-label="Colour preset">
+  {
+    presets.map((p) => (
+      <button
+        type="button"
+        data-preset-btn={p.id}
+        aria-label={`${p.label} palette`}
+        title={p.label}
+        class="h-6 w-6 rounded-full border border-line ring-2 ring-transparent ring-offset-2 ring-offset-surface transition focus-visible:outline-none focus-visible:ring-brand-500"
+        style={`background-color: ${swatch(p.hue, p.chroma)}`}
+      />
+    ))
+  }
+</div>
+
+<script>
+  const root = document.documentElement;
+  const btns = document.querySelectorAll("[data-preset-btn]");
+
+  const sync = () => {
+    const current = root.dataset.preset || "teal";
+    btns.forEach((b) => {
+      const active = b.getAttribute("data-preset-btn") === current;
+      b.classList.toggle("ring-brand-500", active);
+      b.classList.toggle("ring-transparent", !active);
+    });
+  };
+
+  btns.forEach((b) => {
+    b.addEventListener("click", () => {
+      const id = b.getAttribute("data-preset-btn");
+      if (!id) return;
+      root.dataset.preset = id;
+      try {
+        localStorage.setItem("ttb-preset", id);
+      } catch (e) {}
+      sync();
+    });
+  });
+
+  sync();
+</script>

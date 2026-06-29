@@ -1,0 +1,101 @@
+---
+import Logo from "./Logo.astro";
+import CtaButton from "./CtaButton.astro";
+import TextLink from "./TextLink.astro";
+import ThemeToggle from "./ThemeToggle.astro";
+
+interface NavItem {
+  label: string;
+  href: string;
+}
+interface Props {
+  links: NavItem[];
+  ctaLabel?: string;
+  showThemeToggle?: boolean;
+}
+const { links, ctaLabel = "Get access", showThemeToggle = false } = Astro.props;
+---
+
+<header class="sticky top-0 z-40 border-b border-line bg-surface/90 backdrop-blur">
+  <div class="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
+    <Logo />
+
+    <!-- Desktop nav -->
+    <nav class="hidden items-center gap-8 lg:flex">
+      {
+        links.map((l) => (
+          <TextLink href={l.href} class="text-sm font-medium">
+            {l.label}
+          </TextLink>
+        ))
+      }
+    </nav>
+
+    <div class="flex items-center gap-2">
+      {showThemeToggle && <ThemeToggle />}
+
+      <div class="hidden lg:block">
+        <CtaButton label={ctaLabel} size="md" />
+      </div>
+
+      <!-- Mobile hamburger -->
+      <button
+        type="button"
+        class="-mr-1 p-1 text-ink lg:hidden"
+        aria-label="Open menu"
+        aria-expanded="false"
+        data-nav-toggle
+      >
+        <svg
+          class="h-6 w-6"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          aria-hidden="true"
+        >
+          <path d="M4 6h16" />
+          <path d="M4 12h16" />
+          <path d="M4 18h16" />
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile menu -->
+  <div class="hidden border-t border-line bg-surface lg:hidden" data-nav-menu>
+    <nav class="mx-auto flex max-w-6xl flex-col px-6 py-3">
+      {
+        links.map((l) => (
+          <a
+            href={l.href}
+            class="rounded-lg px-2 py-3 text-base font-medium text-ink active:bg-surface-2"
+            data-nav-link
+          >
+            {l.label}
+          </a>
+        ))
+      }
+      <div class="mt-2">
+        <CtaButton label={ctaLabel} class="w-full" />
+      </div>
+    </nav>
+  </div>
+</header>
+
+<script>
+  const toggle = document.querySelector("[data-nav-toggle]");
+  const menu = document.querySelector("[data-nav-menu]");
+  if (toggle && menu) {
+    const close = () => {
+      menu.classList.add("hidden");
+      toggle.setAttribute("aria-expanded", "false");
+    };
+    toggle.addEventListener("click", () => {
+      const nowHidden = menu.classList.toggle("hidden");
+      toggle.setAttribute("aria-expanded", String(!nowHidden));
+    });
+    menu.querySelectorAll("[data-nav-link]").forEach((a) => a.addEventListener("click", close));
+  }
+</script>

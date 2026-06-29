@@ -1,0 +1,530 @@
+---
+import Base from "../layouts/Base.astro";
+import Logo from "../components/Logo.astro";
+import TextLink from "../components/TextLink.astro";
+import EmailForm from "../components/EmailForm.tsx";
+import MobileCtaSheet from "../components/MobileCtaSheet.tsx";
+
+// ============================================================
+// SALES LETTER TEMPLATE - fill in the blanks
+// Long-form editorial left, sticky CTA card right (desktop),
+// sticky bottom button -> form sheet (mobile).
+// Swap the copy below; the structure and behaviour stay as-is.
+// ============================================================
+const eyebrow = "Free Guide";
+const headline = "Turn what you know into an offer people line up to buy";
+const subheadline =
+  "A free, no-fluff guide to packaging your skills, finding your first buyers, and selling without feeling salesy.";
+
+const submitLabel = "Get instant access";
+
+// Sticky card (desktop) copy
+const cardTitle = "Get the free guide";
+const cardBody =
+  "The framework, the templates, and the fill-in-the-blanks worksheets, sent straight to your inbox.";
+const cardQuote = "I went from “someday” to a live offer in a weekend.";
+const cardCite = "Priya Nadar, Brand Strategist";
+
+// Product mockup. Replace with your guide's cover (recommended ~900x1100).
+const assetImage = "https://picsum.photos/seed/ttb-guide/900/1100";
+const assetAlt = "The free guide, cover preview";
+
+// FAQ accordion items. Add, remove, or edit freely.
+const faqs = [
+  {
+    q: "What exactly do I get?",
+    a: "The complete guide: the offer framework, the page and email templates, and the fill-in-the-blanks worksheets, delivered to your inbox.",
+  },
+  {
+    q: "Do I need an audience already?",
+    a: "No. There's a whole section on finding your first buyers when you're starting from zero. An audience helps, but it isn't the requirement people think it is.",
+  },
+  {
+    q: "How long does it take to go through?",
+    a: "You can read it in a sitting. Acting on it is the fun part, and most of it can happen in a single focused weekend.",
+  },
+  {
+    q: "Is it really free?",
+    a: "Yes. No credit card, no trial, no catch. We make money when you decide, later and entirely on your terms, that you want more.",
+  },
+  {
+    q: "What if I've tried this before?",
+    a: "Even better. Most people who've stalled are one or two specific fixes away. This is built to surface exactly those.",
+  },
+];
+---
+
+<Base title={headline} description={subheadline}>
+  <!-- Sticky top bar -->
+  <header
+    class="sticky top-0 z-40 border-b border-line bg-surface/90 backdrop-blur"
+  >
+    <div class="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
+      <Logo />
+      <span class="text-xs font-bold uppercase tracking-wide text-brand-600">
+        100% Free
+      </span>
+    </div>
+  </header>
+
+  <!-- Two-column layout -->
+  <div class="mx-auto flex max-w-6xl gap-10 px-6 pt-10 lg:gap-12">
+    <!-- LEFT: editorial content -->
+    <div class="min-w-0 flex-1">
+      <div class="pb-2 pt-6">
+        <p
+          class="text-xs font-bold uppercase tracking-wide text-brand-600"
+        >
+          {eyebrow}
+        </p>
+        <h1
+          class="mt-3 text-4xl font-extrabold leading-[1.08] tracking-tight text-ink md:text-5xl"
+        >
+          {headline}
+        </h1>
+        <p class="mt-5 max-w-xl text-lg leading-relaxed text-ink-muted">
+          {subheadline}
+        </p>
+      </div>
+
+      <article class="sales-letter max-w-[44rem] pb-12 pt-6">
+        <p>
+          Most people sitting on a genuinely valuable skill never make a cent
+          from it. Not because the skill isn't good enough, but because no one
+          ever showed them how to turn it into something people can actually buy.
+          This guide is the part nobody hands you.
+        </p>
+
+        <p>Jump to <a href="#proof">the results</a> or <a href="#faq">the FAQ</a>.</p>
+
+        <h2>Here's what's inside</h2>
+
+        <p>
+          There's a wide gap between <strong>being good at something</strong> and <strong>having an offer</strong>. One earns you
+          compliments. The other earns you income. This guide walks you through
+          the exact steps to cross that gap, using what you already have, no
+          audience of millions required.
+        </p>
+
+        <p>
+          It isn't a course. There's no twelve-hour video library and no community
+          to keep up with. It's a short, practical guide you can read in one
+          sitting and act on the same day.
+        </p>
+
+        <figure class="sl-figure">
+          <div class="sl-frame">
+            <img
+              src={assetImage}
+              alt={assetAlt}
+              width="900"
+              height="1100"
+              loading="lazy"
+            />
+          </div>
+          <figcaption>
+            Everything in one place: the framework, the templates, and the
+            fill-in-the-blanks worksheets.
+          </figcaption>
+        </figure>
+
+        <h3>A simple framework for your offer</h3>
+        <p>
+          A repeatable way to turn a skill into a clear, specific promise people
+          understand in one read. No positioning theory, just the questions that
+          shape a real offer.
+        </p>
+
+        <h3>Plug-and-play templates</h3>
+        <p>
+          The page, the emails, and the sales message, already written. You swap
+          in your words and your story, then publish. Nothing to design from a
+          blank page.
+        </p>
+
+        <h3>Where to find your first buyers</h3>
+        <p>
+          The unglamorous truth about getting your first ten customers, and the
+          short list of places they're already waiting. No paid ads needed to
+          start.
+        </p>
+
+        <h3>Pricing without the guesswork</h3>
+        <p>
+          A clear way to land on a number that feels fair to you and obvious to
+          them, so you stop pricing from fear and start pricing from value.
+        </p>
+
+        <h3>A step-by-step launch checklist</h3>
+        <p>
+          Takes you from "I have an idea" to "it's live and I've made my first
+          sale." Tick the boxes in order. No theory, no fluff.
+        </p>
+
+        <h2>Where this fits</h2>
+
+        <ul>
+          <li>
+            <strong>As your starting point.</strong> You have the skill but no
+            offer yet. Start here and skip the years of trial and error.
+          </li>
+          <li>
+            <strong>As a second income stream.</strong> Keep the job, build the
+            thing on the side, on a system instead of a hope.
+          </li>
+          <li>
+            <strong>As a reset.</strong> Tried before and it fizzled? Most people
+            were one or two fixes away. This shows you which ones.
+          </li>
+          <li>
+            <strong>For an audience you already have.</strong> Sitting on
+            followers but no offer? Give them something to actually buy.
+          </li>
+        </ul>
+
+        <h2 id="proof">But does it actually work?</h2>
+
+        <blockquote>
+          I'd been "about to launch" for two years. I read this on a Saturday,
+          built the offer on Sunday, and had paying customers by the end of the
+          week. The templates did the heavy lifting.
+          <cite>Priya Nadar, Brand Strategist</cite>
+        </blockquote>
+
+        <p>
+          Priya isn't unusual. The pattern repeats because most people start from
+          such a standstill that any clear, systematic approach beats "figure it
+          out as I go" by a mile.
+        </p>
+
+        <blockquote>
+          I always thought I needed a huge following first. Turns out I needed an
+          offer first. I made more from my small list in a month than I had all
+          year.
+          <cite>Dan Whitfield, Career Coach</cite>
+        </blockquote>
+
+        <blockquote>
+          The pricing section alone changed how I run my business. I stopped
+          undercharging out of fear and finally felt good about the number.
+          <cite>Elena Rossi, Illustrator</cite>
+        </blockquote>
+
+        <h2>Why is it free?</h2>
+
+        <p>
+          Because it's the front door. When you use this and it works, some of you
+          will want to go further, the deeper trainings, the done-with-you help,
+          the community. That's where we earn a living.
+        </p>
+
+        <p>
+          Not by hiding the basics behind a paywall, but by giving you something
+          that works, letting you prove it to yourself, and being here when you're
+          ready for the next step.
+        </p>
+
+        <h2 id="faq">Frequently asked questions</h2>
+
+        <div class="sl-faq" data-faq>
+          {
+            faqs.map((f) => (
+              <div class="sl-faq-item" data-faq-item>
+                <button
+                  type="button"
+                  class="sl-faq-q"
+                  data-faq-trigger
+                  aria-expanded="false"
+                >
+                  <span>{f.q}</span>
+                  <svg
+                    class="sl-faq-chev"
+                    width="18"
+                    height="18"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path d="m6 9 6 6 6-6" />
+                  </svg>
+                </button>
+                <div class="sl-faq-panel" data-faq-panel>
+                  <div class="sl-faq-answer">
+                    <p>{f.a}</p>
+                  </div>
+                </div>
+              </div>
+            ))
+          }
+        </div>
+
+        <!-- Spacer so the mobile sticky bar never covers the last lines -->
+        <div class="h-24 lg:hidden"></div>
+      </article>
+    </div>
+
+    <!-- RIGHT: sticky CTA card (desktop only) -->
+    <aside class="hidden w-[400px] shrink-0 lg:block">
+      <div class="sticky top-24 pt-10">
+        <div class="rounded-card border border-line bg-card p-8">
+          <p class="text-xs font-bold uppercase tracking-wide text-brand-600">
+            {eyebrow}
+          </p>
+          <p class="mt-2 text-xl font-bold leading-snug text-ink">{cardTitle}</p>
+          <p class="mt-2.5 text-sm leading-relaxed text-ink-muted">{cardBody}</p>
+
+          <div class="mt-5 border-t border-line pt-5">
+            <EmailForm client:load submitLabel={submitLabel} />
+          </div>
+
+          <div class="mt-5 border-t border-line pt-5">
+            <div
+              class="text-sm leading-none tracking-wide text-brand-500"
+              aria-hidden="true"
+            >
+              &#9733;&#9733;&#9733;&#9733;&#9733;
+            </div>
+            <p class="mt-2 text-xs italic leading-relaxed text-ink">{cardQuote}</p>
+            <p class="mt-1 text-xs font-medium text-ink-muted">{cardCite}</p>
+          </div>
+        </div>
+
+        <p class="mt-3 text-center text-xs text-ink-muted">
+          No spam. Unsubscribe anytime.
+        </p>
+      </div>
+    </aside>
+  </div>
+
+  <!-- Mobile sticky form sheet -->
+  <MobileCtaSheet
+    client:load
+    ctaLabel={submitLabel}
+    submitLabel={submitLabel}
+    sheetTitle={cardTitle}
+    sheetBody={cardBody}
+  />
+
+  <!-- Footer -->
+  <footer class="mt-8 border-t border-line">
+    <div
+      class="mx-auto flex max-w-6xl flex-col items-center justify-between gap-2 px-6 py-5 text-xs text-ink-muted sm:flex-row"
+    >
+      <p>&copy; {new Date().getFullYear()} Time to Build. All rights reserved.</p>
+      <div class="flex items-center gap-5">
+        <TextLink href="/privacy">Privacy</TextLink>
+        <TextLink href="/terms">Terms</TextLink>
+      </div>
+    </div>
+  </footer>
+</Base>
+
+<script>
+  // FAQ accordion: animated open + close, one open at a time.
+  const DURATION = 400;
+  const EASING = "cubic-bezier(0.65, 0, 0.35, 1)";
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  document.querySelectorAll("[data-faq]").forEach((faq) => {
+    const items = Array.from(faq.querySelectorAll("[data-faq-item]"));
+    let openItem = null;
+
+    const panelOf = (item) => item.querySelector("[data-faq-panel]");
+    const triggerOf = (item) => item.querySelector("[data-faq-trigger]");
+
+    function close(item) {
+      const panel = panelOf(item);
+      item.removeAttribute("data-open");
+      triggerOf(item).setAttribute("aria-expanded", "false");
+      if (reduce) {
+        panel.style.height = "0px";
+        return;
+      }
+      panel.style.height = panel.scrollHeight + "px";
+      void panel.offsetHeight; // force reflow so the transition runs
+      panel.style.height = "0px";
+    }
+
+    function open(item) {
+      const panel = panelOf(item);
+      item.setAttribute("data-open", "");
+      triggerOf(item).setAttribute("aria-expanded", "true");
+      if (reduce) {
+        panel.style.height = "auto";
+        return;
+      }
+      panel.style.height = panel.scrollHeight + "px";
+      const onEnd = (e) => {
+        if (e.propertyName !== "height") return;
+        panel.removeEventListener("transitionend", onEnd);
+        if (item.hasAttribute("data-open")) panel.style.height = "auto";
+      };
+      panel.addEventListener("transitionend", onEnd);
+    }
+
+    items.forEach((item) => {
+      const panel = panelOf(item);
+      panel.style.transition = `height ${DURATION}ms ${EASING}`;
+      panel.style.height = "0px";
+      triggerOf(item).addEventListener("click", () => {
+        if (item.hasAttribute("data-open")) {
+          close(item);
+          openItem = null;
+          return;
+        }
+        if (openItem && openItem !== item) close(openItem);
+        open(item);
+        openItem = item;
+      });
+    });
+  });
+</script>
+
+<style>
+  /* Editorial prose typography (our tokens) */
+  .sales-letter {
+    font-size: 1rem;
+    line-height: 1.8;
+    color: var(--color-ink-muted);
+  }
+  .sales-letter > * + * {
+    margin-top: 1.25em;
+  }
+  .sales-letter strong {
+    color: var(--color-ink);
+    font-weight: 600;
+  }
+  .sales-letter em {
+    font-style: italic;
+  }
+  .sales-letter a {
+    color: var(--color-ink);
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-thickness: 1.5px;
+  }
+  .sales-letter a:hover {
+    color: var(--color-brand-600);
+  }
+  .sales-letter h2 {
+    margin-top: 2.5em;
+    margin-bottom: 0.3em;
+    font-size: 1.625rem;
+    font-weight: 700;
+    line-height: 1.25;
+    letter-spacing: -0.02em;
+    color: var(--color-ink);
+  }
+  .sales-letter h3 {
+    margin-top: 1.85em;
+    margin-bottom: 0.2em;
+    font-size: 1.125rem;
+    font-weight: 700;
+    line-height: 1.4;
+    color: var(--color-ink);
+  }
+  .sales-letter ul {
+    margin-top: 1em;
+    list-style: disc;
+    padding-left: 1.25em;
+  }
+  .sales-letter li {
+    margin-top: 0.65em;
+  }
+  .sales-letter blockquote {
+    margin-top: 1.5em;
+    margin-bottom: 1.5em;
+    padding-left: 1.25rem;
+    border-left: 3px solid var(--color-brand-500);
+    font-style: italic;
+    color: var(--color-ink);
+  }
+  .sales-letter blockquote cite {
+    display: block;
+    margin-top: 0.5em;
+    font-style: normal;
+    font-size: 0.8125rem;
+    color: var(--color-ink-muted);
+  }
+
+  /* Product figure */
+  .sl-figure {
+    margin: 2.5rem 0;
+  }
+  .sl-frame {
+    display: flex;
+    justify-content: center;
+    padding: 2rem;
+    border: 1px solid var(--color-line);
+    border-radius: 1rem;
+    background: var(--color-surface-2);
+  }
+  .sl-frame img {
+    width: 260px;
+    height: auto;
+    border-radius: 0.375rem;
+  }
+  .sl-figure figcaption {
+    margin-top: 0.75rem;
+    text-align: center;
+    font-size: 0.8125rem;
+    color: var(--color-ink-muted);
+  }
+
+  /* FAQ accordion */
+  .sl-faq {
+    margin-top: 1.25em;
+    border-top: 1px solid var(--color-line);
+  }
+  .sl-faq-item {
+    border-bottom: 1px solid var(--color-line);
+  }
+  .sl-faq-q {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    width: 100%;
+    padding: 1.1rem 0;
+    border: none;
+    background: none;
+    cursor: pointer;
+    text-align: left;
+    font: inherit;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--color-ink);
+  }
+  .sl-faq-chev {
+    flex-shrink: 0;
+    color: var(--color-ink-muted);
+    transition: transform 400ms cubic-bezier(0.65, 0, 0.35, 1);
+  }
+  .sl-faq-item[data-open] .sl-faq-chev {
+    transform: rotate(180deg);
+  }
+  .sl-faq-panel {
+    height: 0;
+    overflow: hidden;
+  }
+  .sl-faq-answer {
+    padding-bottom: 1.1rem;
+    color: var(--color-ink-muted);
+    line-height: 1.7;
+  }
+  .sl-faq-answer p {
+    margin: 0;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .sl-faq-chev {
+      transition: none;
+    }
+  }
+
+  /* Body stays 16px at all breakpoints (matches inputs, buttons, benefit lists) */
+</style>

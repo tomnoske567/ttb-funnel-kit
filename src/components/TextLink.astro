@@ -1,0 +1,24 @@
+---
+// The "link" style: muted text that darkens to full ink on hover, with a
+// 4px-offset underline appearing as the colour eases over 150ms. Use it for
+// nav items and any inline text link. Pass extra classes for size/weight.
+interface Props {
+  href: string;
+  class?: string;
+  external?: boolean;
+  [key: string]: unknown;
+}
+
+const { href, class: cls = "", external, ...rest } = Astro.props;
+
+const isExternal = external ?? /^https?:\/\//.test(href);
+const target = isExternal ? "_blank" : undefined;
+const rel = isExternal ? "noopener noreferrer" : undefined;
+
+const base =
+  "text-ink-muted underline-offset-4 transition-colors duration-150 ease-out hover:text-ink hover:underline focus-visible:outline-none focus-visible:rounded focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2";
+---
+
+<a href={href} target={target} rel={rel} class={`${base} ${cls}`} {...rest}>
+  <slot />
+</a>
