@@ -87,12 +87,10 @@ const avatarBorder = "border-surface";
   {
     bullets.length > 0 && (
       <ul
-        class={`mt-6 ${isCenter ? "flex flex-wrap justify-center gap-x-5 gap-y-2.5" : "grid gap-3 sm:grid-cols-2"}`}
+        class={`mt-6 ${isCenter ? "mx-auto grid max-w-xl gap-x-8 gap-y-3 text-left sm:grid-cols-2" : "grid gap-3 sm:grid-cols-2"}`}
       >
         {bullets.map((b) => (
-          <li
-            class={`flex gap-2.5 ${bulletColor} ${isCenter ? "items-center" : "items-start"}`}
-          >
+          <li class={`flex items-start gap-2.5 ${bulletColor}`}>
             <span class="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-brand-500">
               <svg
                 class="h-3 w-3 text-brand-ink"
